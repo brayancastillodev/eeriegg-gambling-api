@@ -1,8 +1,8 @@
-import { WebsocketErrorMessage } from "../../error/types";
-import { WebsocketError } from "../../error/websocket-error";
+import { WebsocketErrorMessage } from "../../helper/error/types";
+import { WebsocketError } from "../../helper/error/websocket-error";
 import {
-  IIncomingSocketMessage,
-  SocketAction,
+  IncomingSocketMessage,
+  GeneralSocketAction,
   SocketChannelName,
 } from "./types";
 
@@ -15,7 +15,7 @@ const parseJson = (data: any): any => {
   }
 };
 
-export const messageParser = (message: string): IIncomingSocketMessage => {
+export const messageParser = (message: string): IncomingSocketMessage => {
   const json = parseJson(message);
   if (
     !json.channel ||
@@ -28,12 +28,13 @@ export const messageParser = (message: string): IIncomingSocketMessage => {
   if (!Object.values(SocketChannelName).includes(json.channel)) {
     throw new WebsocketError(WebsocketErrorMessage.INVALID_CHANNEL);
   }
-  if (!Object.values(SocketAction).includes(json.action)) {
+  if (!Object.values(GeneralSocketAction).includes(json.action)) {
     throw new WebsocketError(WebsocketErrorMessage.INVALID_ACTION);
   }
 
   return {
     channel: json.channel,
     action: json.action,
+    data: json.data,
   };
 };

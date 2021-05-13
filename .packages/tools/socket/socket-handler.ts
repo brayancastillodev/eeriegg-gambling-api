@@ -1,6 +1,9 @@
 import WebSocket from "ws";
+import {
+  SocketPoolInstance,
+  SocketServiceInstance,
+} from "../../singleton/socket";
 import { SocketClient } from "./socket-client";
-import { SocketPoolInstance, SocketServiceInstance } from "../../singleton";
 
 /**
  * The `SocketHandler` is responsible to handle all the incoming socket connections.
@@ -9,7 +12,7 @@ import { SocketPoolInstance, SocketServiceInstance } from "../../singleton";
 export class SocketHandler {
   private clientGuard: NodeJS.Timeout | undefined;
   private wss: WebSocket.Server | undefined;
-  constructor(protected name: string, strapi: any) {
+  constructor(strapi: any) {
     this.manageClientConnections();
     this.wss = new WebSocket.Server({ server: strapi.server });
     this.init();
@@ -20,17 +23,13 @@ export class SocketHandler {
       const id = req.headers["sec-websocket-key"] as string;
       const client = this.registerClient(socket, id);
       socket.on("message", (message) => {
-        console.log("socket handler", "message", message);
+        console.log("SocketHandler", "incoming message", message);
         if (typeof message !== "string") {
-          console.log("SocketHandler", "invalid message type send");
+          console.warn("SocketHandler", "invalid message type");
           this.unregisterClient(client);
           return;
         }
-        try {
-          SocketServiceInstance.handleIncomingMessage(client, message);
-        } catch (err) {
-          console.log("SocketHandler", "error parsing data", err);
-        }
+        SocketServiceInstance.handleIncomingMessage(client, message);
       });
     });
   }
@@ -40,7 +39,7 @@ export class SocketHandler {
    * Before the client is registered the `protocol` header is verified to include a valid access token.
    */
   registerClient = (socket: WebSocket, id: string): SocketClient => {
-    console.log(`SocketHandler - ${this.name}`, "registerClient", id);
+    console.log(`SocketHandler`, "registerClient", id);
     const client = SocketPoolInstance.newClient(id, socket);
     this.listenClientEvents(client);
     return client;
@@ -49,11 +48,7 @@ export class SocketHandler {
   private listenClientEvents = (client: SocketClient) => {
     client.socket.on("error", this.handleClientError);
     client.socket.on("close", (reason: any) => {
-      console.log(
-        `SocketHandler - ${this.name}`,
-        "listenClientEvents - closed",
-        reason
-      );
+      console.log(`SocketHandler`, "listenClientEvents - closed", reason);
       this.unregisterClient(client);
     });
   };
@@ -64,11 +59,7 @@ export class SocketHandler {
   private unregisterClient = (client: SocketClient): void => {
     client.terminateConnection();
     if (SocketPoolInstance.getClient(client.id)) {
-      console.log(
-        `SocketHandler - ${this.name}`,
-        "unregisterClient",
-        client.id
-      );
+      console.log(`SocketHandler`, "unregisterClient", client.id);
       SocketPoolInstance.removeClient(client.id);
     }
   };
@@ -79,8 +70,8 @@ export class SocketHandler {
    */
   private manageClientConnections = (): void => {
     this.clientGuard = setInterval(() => {
-      if (!SocketPoolInstance.getClients()) return;
-      for (const client of SocketPoolInstance.getClients()) {
+      if (!SocketPoolInstance.getAllClients()) return;
+      for (const client of SocketPoolInstance.getAllClients()) {
         if (!client.isAlive()) return this.unregisterClient(client);
         client.checkIsAlive();
       }
@@ -90,17 +81,14 @@ export class SocketHandler {
   public stopSocket = (): void => {
     if (!this.clientGuard) return;
     clearInterval(this.clientGuard);
-    if (!SocketPoolInstance.getClients()) return;
-    for (const client of SocketPoolInstance.getClients()) {
+    const clients = SocketPoolInstance.getAllClients();
+    if (!clients) return;
+    for (const client of clients) {
       this.unregisterClient(client);
     }
   };
 
   private handleClientError = (error: Error) => {
-    console.log(
-      `SocketHandler - ${this.name}`,
-      "handleClientError",
-      error.message
-    );
+    console.warn(`SocketHandler`, "handleClientError", error.message);
   };
 }

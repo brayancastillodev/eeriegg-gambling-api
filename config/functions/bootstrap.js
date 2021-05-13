@@ -1,8 +1,6 @@
 "use strict";
 require("module-alias/register");
-const {
-  SocketHandler,
-} = require("../../packages/services/socket/socket-handler");
+const { runApplication } = require("../../packages/app/app");
 /**
  * An asynchronous bootstrap function that runs before
  * your application gets started.
@@ -14,5 +12,5 @@ const {
  */
 
 module.exports = () => {
-  new SocketHandler("default", strapi);
+  runApplication(strapi);
 };

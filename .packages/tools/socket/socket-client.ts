@@ -1,4 +1,5 @@
-import WebSocket from 'ws';
+import WebSocket from "ws";
+import { IWebsocketErrorMessage, OutgoingSocketMessage } from "./types";
 
 /**
  * The `SocketClient` holds the clients socket connection. It is responsible to just communicate with the client.
@@ -31,7 +32,7 @@ export class SocketClient {
 
   terminateConnection = () => {
     if (this.socket && this.socket.OPEN) {
-      this.socket.close(1000, 'no activity');
+      this.socket.close(1000, "no activity");
       this.alive = false;
     }
   };
@@ -41,12 +42,12 @@ export class SocketClient {
    * send any messages to the client connection.
    * @param response
    */
-  send = (response: any): void => {
+  send = (response: OutgoingSocketMessage | IWebsocketErrorMessage): void => {
     if (!this.socket.OPEN) return;
     try {
       this.socket.send(JSON.stringify(response));
     } catch (err) {
-      console.log('SocketClient', 'send', 'error', err);
+      console.warn("SocketClient", "send", "error", err);
     }
   };
 }

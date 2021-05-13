@@ -1,5 +1,5 @@
-import { SocketHandler } from "../services/socket/socket-handler";
+import { SocketHandler } from "../tools/socket/socket-handler";
 
 export const runApplication = (strapi: any): void => {
-  const socketHandler = new SocketHandler("default", strapi);
+  new SocketHandler(strapi);
 };
