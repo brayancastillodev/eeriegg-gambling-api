@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "btc_transactions",
+  "info": {
+    "name": "BTC Transaction",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "transactionHash": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "amount": {
+      "required": true,
+      "type": "biginteger"
+    },
+    "wallet": {
+      "model": "address"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Deposit",
+        "Withdraw"
+      ]
+    }
+  }
+}

@@ -14,7 +14,8 @@ export class ChatService extends SocketChannel {
       client: SocketClient
     ) => void;
   } = {
-    send: this.onMessage,
+    send: (message: IChatIncomingMessage, client: SocketClient) =>
+      this.onMessage(message, client),
   };
 
   protected messageValidator: {

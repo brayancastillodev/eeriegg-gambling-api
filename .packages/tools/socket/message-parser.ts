@@ -1,10 +1,6 @@
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import {
-  IncomingSocketMessage,
-  GeneralSocketAction,
-  SocketChannelName,
-} from "./types";
+import { IncomingSocketMessage, SocketChannelName } from "./types";
 
 const parseJson = (data: any): any => {
   try {
@@ -27,9 +23,6 @@ export const messageParser = (message: string): IncomingSocketMessage => {
   }
   if (!Object.values(SocketChannelName).includes(json.channel)) {
     throw new WebsocketError(WebsocketErrorMessage.INVALID_CHANNEL);
-  }
-  if (!Object.values(GeneralSocketAction).includes(json.action)) {
-    throw new WebsocketError(WebsocketErrorMessage.INVALID_ACTION);
   }
 
   return {

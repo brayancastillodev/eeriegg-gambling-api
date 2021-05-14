@@ -9,9 +9,9 @@ export class SocketService {
   };
 
   handleIncomingMessage(client: SocketClient, message: string) {
-    const parsedMessage = messageParser(message);
-    const channel = this.channels[parsedMessage.channel];
     try {
+      const parsedMessage = messageParser(message);
+      const channel = this.channels[parsedMessage.channel];
       channel.handleAction(parsedMessage, client);
     } catch (error) {
       client.send({ error: true, message: error?.message || "unknown error" });

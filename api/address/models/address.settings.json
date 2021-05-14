@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wallets",
+  "info": {
+    "name": "Wallet",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "public_key": {
+      "type": "string",
+      "private": true,
+      "required": true,
+      "unique": true
+    },
+    "private_key": {
+      "type": "string",
+      "private": true,
+      "required": true,
+      "unique": false
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "via": "wallets"
+    }
+  }
+}
