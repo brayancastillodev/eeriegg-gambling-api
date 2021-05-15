@@ -61,7 +61,7 @@
     },
     "wallets": {
       "via": "user",
-      "collection": "address"
+      "collection": "wallet"
     }
   }
 }

@@ -1257,7 +1257,8 @@
               "required": [
                 "id",
                 "public_key",
-                "private_key"
+                "private_key",
+                "user"
               ],
               "properties": {
                 "id": {

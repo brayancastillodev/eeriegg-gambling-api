@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "btc-balances",
+  "info": {
+    "name": "BTCBalance",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "available": {
+      "type": "biginteger",
+      "default": "0",
+      "private": true
+    },
+    "locked": {
+      "type": "biginteger",
+      "default": "0",
+      "private": true
+    },
+    "user": {
+      "plugin": "users-permissions",
+      "model": "user",
+      "required": true
+    }
+  }
+}

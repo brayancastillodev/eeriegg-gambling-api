@@ -114,4 +114,4 @@ build
 .strapi-updater.json
 build-ts
 tsconfig.tsbuildinfo
-packages
+js

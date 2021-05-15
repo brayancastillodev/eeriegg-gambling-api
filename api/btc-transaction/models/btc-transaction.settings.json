@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "btc_transactions",
   "info": {
-    "name": "BTC Transaction",
+    "name": "BTCTransaction",
     "description": ""
   },
   "options": {
@@ -22,10 +22,12 @@
       "type": "biginteger"
     },
     "wallet": {
-      "model": "address"
+      "required": true,
+      "model": "wallet"
     },
     "type": {
       "type": "enumeration",
+      "required": true,
       "enum": [
         "Deposit",
         "Withdraw"

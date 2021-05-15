@@ -1,6 +1,6 @@
 {
   "paths": {
-    "btc-transactions": {
+    "/btc-balances": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -52,7 +52,7 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "parameters": [
           {
@@ -244,7 +244,7 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "requestBody": {
           "description": "",
@@ -252,14 +252,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewBtc-transaction"
+                "$ref": "#/components/schemas/NewBtc-balance"
               }
             }
           }
         }
       }
     },
-    "btc-transactions/count": {
+    "/btc-balances/count": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -311,12 +311,12 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "parameters": []
       }
     },
-    "btc-transactions/{id}": {
+    "/btc-balances/{id}": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -368,7 +368,7 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "parameters": [
           {
@@ -434,7 +434,7 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "requestBody": {
           "description": "",
@@ -442,7 +442,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewBtc-transaction"
+                "$ref": "#/components/schemas/NewBtc-balance"
               }
             }
           }
@@ -508,7 +508,7 @@
         },
         "summary": "",
         "tags": [
-          "Btc-transaction"
+          "Btc-balance"
         ],
         "parameters": [
           {
@@ -527,43 +527,57 @@
   },
   "components": {
     "schemas": {
-      "Btc-transaction": {
+      "Btc-balance": {
         "required": [
           "id",
-          "transactionHash",
-          "amount",
-          "wallet",
-          "type"
+          "user"
         ],
         "properties": {
           "id": {
             "type": "string"
           },
-          "transactionHash": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "integer"
-          },
-          "wallet": {
+          "user": {
             "required": [
               "id",
-              "public_key",
-              "private_key",
-              "user"
+              "username",
+              "email"
             ],
             "properties": {
               "id": {
                 "type": "string"
               },
-              "public_key": {
+              "username": {
                 "type": "string"
               },
-              "private_key": {
+              "email": {
                 "type": "string"
               },
-              "user": {
+              "provider": {
                 "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "resetPasswordToken": {
+                "type": "string"
+              },
+              "confirmationToken": {
+                "type": "string"
+              },
+              "confirmed": {
+                "type": "boolean"
+              },
+              "blocked": {
+                "type": "boolean"
+              },
+              "role": {
+                "type": "string"
+              },
+              "wallets": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
               },
               "created_by": {
                 "type": "string"
@@ -572,39 +586,24 @@
                 "type": "string"
               }
             }
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "Deposit",
-              "Withdraw"
-            ]
           }
         }
       },
-      "NewBtc-transaction": {
+      "NewBtc-balance": {
         "required": [
-          "transactionHash",
-          "amount",
-          "wallet",
-          "type"
+          "user"
         ],
         "properties": {
-          "transactionHash": {
+          "available": {
+            "type": "integer",
+            "default": "0"
+          },
+          "locked": {
+            "type": "integer",
+            "default": "0"
+          },
+          "user": {
             "type": "string"
-          },
-          "amount": {
-            "type": "integer"
-          },
-          "wallet": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string",
-            "enum": [
-              "Deposit",
-              "Withdraw"
-            ]
           },
           "created_by": {
             "type": "string"

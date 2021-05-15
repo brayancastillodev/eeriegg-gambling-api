@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/btc-balances",
+      "handler": "btc-balance.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/btc-balances/count",
+      "handler": "btc-balance.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/btc-balances/:id",
+      "handler": "btc-balance.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/btc-balances",
+      "handler": "btc-balance.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/btc-balances/:id",
+      "handler": "btc-balance.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/btc-balances/:id",
+      "handler": "btc-balance.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

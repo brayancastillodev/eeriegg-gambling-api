@@ -1,6 +1,6 @@
 "use strict";
 require("module-alias/register");
-const { runApplication } = require("../../packages/app/app");
+const { runApplication } = require("../../js/app/app");
 /**
  * An asynchronous bootstrap function that runs before
  * your application gets started.

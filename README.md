@@ -6,6 +6,10 @@ This is a strapi application. Find the docs [here](https://strapi.io/documentati
 
 Define models in `/api`
 
+## Typescript
+Source root: `/.ts` \
+Run `tsc` in project root to transpile to `/js`
+
 ## Development
 
 Run `yarn dev`

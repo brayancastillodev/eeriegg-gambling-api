@@ -4,13 +4,15 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "dev": "strapi develop",
+    "dev": "yarn sts && strapi develop",
     "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi"
+    "build": "yarn sts && strapi build",
+    "strapi": "strapi",
+    "sts": "sts -c .sts.config.js"
   },
   "devDependencies": {
-    "@types/uuid": "^8.3.0"
+    "@types/uuid": "^8.3.0",
+    "strapi-to-typescript": "^2.0.9"
   },
   "dependencies": {
     "knex": "0.21.18",
@@ -32,7 +34,7 @@
     "uuid": "^8.3.2"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "Bulat Salyakhov"
   },
   "strapi": {
     "uuid": "4577f471-2e03-480a-8d92-15124d41575c"

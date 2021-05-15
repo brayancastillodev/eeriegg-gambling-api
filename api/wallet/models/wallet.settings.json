@@ -27,6 +27,7 @@
     "user": {
       "plugin": "users-permissions",
       "model": "user",
+      "required": true,
       "via": "wallets"
     }
   }
