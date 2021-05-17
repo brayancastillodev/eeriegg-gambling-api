@@ -1,10 +1,14 @@
 import WebSocket from "ws";
+import { WebsocketErrorMessage } from "../../helper/error/types";
+import { WebsocketError } from "../../helper/error/websocket-error";
+import { IUserModel } from "../../models";
 import { IWebsocketErrorMessage, OutgoingSocketMessage } from "./types";
 
 /**
  * The `SocketClient` holds the clients socket connection. It is responsible to just communicate with the client.
  */
 export class SocketClient {
+  private _user: IUserModel | undefined;
   constructor(
     public readonly socket: WebSocket,
     public readonly id: string,
@@ -37,12 +41,27 @@ export class SocketClient {
     }
   };
 
+  get user(): IUserModel {
+    if (!this._user) {
+      throw new WebsocketError(WebsocketErrorMessage.UNAUTHORIZED);
+    }
+    return this._user;
+  }
+
+  authenticateUser(user: IUserModel) {
+    if (!user) {
+      throw new WebsocketError(WebsocketErrorMessage.UNAUTHORIZED);
+    }
+    this._user = user;
+  }
   /**
    * Messages to the client must a specific interface. If the connection state is not `OPEN` we do not
    * send any messages to the client connection.
    * @param response
    */
-  send = (response: OutgoingSocketMessage | IWebsocketErrorMessage): void => {
+  send = (
+    response: OutgoingSocketMessage<any, any> | IWebsocketErrorMessage
+  ): void => {
     if (!this.socket.OPEN) return;
     try {
       this.socket.send(JSON.stringify(response));

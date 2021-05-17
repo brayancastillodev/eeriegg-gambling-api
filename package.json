@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "dev": "yarn sts && strapi develop",
+    "dev": "tsc && yarn sts && strapi develop",
     "start": "strapi start",
-    "build": "yarn sts && strapi build",
+    "build": "tsc && yarn sts && strapi build",
     "strapi": "strapi",
     "sts": "sts -c .sts.config.js"
   },
@@ -34,7 +34,7 @@
     "uuid": "^8.3.2"
   },
   "author": {
-    "name": "Bulat Salyakhov"
+    "name": ""
   },
   "strapi": {
     "uuid": "4577f471-2e03-480a-8d92-15124d41575c"

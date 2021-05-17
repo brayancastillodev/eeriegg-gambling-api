@@ -21,15 +21,19 @@ export class SocketHandler {
   private init() {
     this.wss?.on("connection", (socket, req) => {
       const id = req.headers["sec-websocket-key"] as string;
-      const client = this.registerClient(socket, id);
+      this.registerClient(socket, id);
       socket.on("message", (message) => {
-        console.log("SocketHandler", "incoming message", message);
-        if (typeof message !== "string") {
-          console.warn("SocketHandler", "invalid message type");
-          this.unregisterClient(client);
-          return;
+        try {
+          console.log("SocketHandler", "incoming message", message);
+          if (typeof message !== "string") {
+            console.warn("SocketHandler", "invalid message type");
+            this.unregisterClient(id);
+            return;
+          }
+          SocketServiceInstance.handleIncomingMessage(id, message);
+        } catch (err) {
+          this.handleClientError(err, id);
         }
-        SocketServiceInstance.handleIncomingMessage(client, message);
       });
     });
   }
@@ -38,7 +42,7 @@ export class SocketHandler {
    * Anytime a client wants to connect to the socket a new `SocketClient` instance is created.
    * Before the client is registered the `protocol` header is verified to include a valid access token.
    */
-  registerClient = (socket: WebSocket, id: string): SocketClient => {
+  private registerClient = (socket: WebSocket, id: string): SocketClient => {
     console.log(`SocketHandler`, "registerClient", id);
     const client = SocketPoolInstance.newClient(id, socket);
     this.listenClientEvents(client);
@@ -49,18 +53,21 @@ export class SocketHandler {
     client.socket.on("error", this.handleClientError);
     client.socket.on("close", (reason: any) => {
       console.log(`SocketHandler`, "listenClientEvents - closed", reason);
-      this.unregisterClient(client);
+      this.unregisterClient(client.id);
     });
   };
 
   /**
    * Method to terminate clients connection and remove it from the connections `Map`
    */
-  private unregisterClient = (client: SocketClient): void => {
-    client.terminateConnection();
-    if (SocketPoolInstance.getClient(client.id)) {
-      console.log(`SocketHandler`, "unregisterClient", client.id);
+  private unregisterClient = (clientId: string): void => {
+    console.log(`SocketHandler`, "unregisterClient", clientId);
+    try {
+      const client = SocketPoolInstance.getClient(clientId);
+      client.terminateConnection();
       SocketPoolInstance.removeClient(client.id);
+    } catch (err) {
+      console.info("SocketHandler", "unregisterClient", "not found", clientId);
     }
   };
 
@@ -72,7 +79,7 @@ export class SocketHandler {
     this.clientGuard = setInterval(() => {
       if (!SocketPoolInstance.getAllClients()) return;
       for (const client of SocketPoolInstance.getAllClients()) {
-        if (!client.isAlive()) return this.unregisterClient(client);
+        if (!client.isAlive()) return this.unregisterClient(client.id);
         client.checkIsAlive();
       }
     }, 1000 * 60);
@@ -84,11 +91,16 @@ export class SocketHandler {
     const clients = SocketPoolInstance.getAllClients();
     if (!clients) return;
     for (const client of clients) {
-      this.unregisterClient(client);
+      this.unregisterClient(client.id);
     }
   };
 
-  private handleClientError = (error: Error) => {
-    console.warn(`SocketHandler`, "handleClientError", error.message);
+  private handleClientError = (error: Error, clientId: string) => {
+    console.warn(
+      `SocketHandler`,
+      "handleClientError",
+      clientId,
+      error?.message || error
+    );
   };
 }

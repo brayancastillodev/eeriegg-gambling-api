@@ -1,7 +1,4 @@
 export interface IChatIncomingMessage {
-  user: {
-    id: string;
-  };
   text: string;
 }
 export interface IChatOutgoingMessage {

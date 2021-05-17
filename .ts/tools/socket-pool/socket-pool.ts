@@ -1,12 +1,14 @@
 import { SocketClient } from "../socket/socket-client";
 import WebSocket from "ws";
+import { WebsocketError } from "../../helper/error/websocket-error";
+import { WebsocketErrorMessage } from "../../helper/error/types";
 
 export class SocketPool {
   private sockets = new Map<string, SocketClient>();
 
   getClient(id: string): SocketClient {
     const socket = this.sockets.get(id);
-    if (!socket) throw new Error(`SocketPool: invalid socket id`);
+    if (!socket) throw new WebsocketError(WebsocketErrorMessage.UNKNOWN_CLIENT);
     return socket;
   }
 
@@ -25,6 +27,11 @@ export class SocketPool {
   }
 
   getClients(ids: string[]): SocketClient[] {
-    return ids.map((id) => this.getClient(id));
+    const clients: SocketClient[] = [];
+    ids.forEach((id) => {
+      const client = this.sockets.get(id);
+      if (client) clients.push(client);
+    });
+    return clients;
   }
 }

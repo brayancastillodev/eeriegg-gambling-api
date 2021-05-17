@@ -7,38 +7,38 @@ import {
   IncomingSocketMessage,
   ISocketChannelActionMap,
   ISocketChannelEventMap,
-  GeneralSocketAction,
+  CommonSocketAction,
   SocketChannelName,
 } from "../socket/types";
 
-export class SocketChannel {
+export class SocketChannel<Channel extends SocketChannelName> {
   private attendees = new Map<string, boolean>();
   public readonly id = uuid.v1();
-  constructor(public readonly name: SocketChannelName) {}
+  constructor(public readonly name: Channel) {}
   protected actions:
     | {
-        [A in keyof ISocketChannelActionMap[SocketChannelName]]: (
-          message: ISocketChannelActionMap[SocketChannelName][A],
-          client: SocketClient
+        [A in keyof ISocketChannelActionMap[Channel]]: (
+          clientId: string,
+          message: ISocketChannelActionMap[Channel][A]
         ) => void;
       }
     | undefined;
   protected messageValidator:
     | {
-        [A in keyof ISocketChannelActionMap[SocketChannelName]]: (
+        [A in keyof ISocketChannelActionMap[Channel]]: (
           data: any
-        ) => boolean;
+        ) => data is ISocketChannelActionMap[Channel][A];
       }
     | undefined;
 
-  handleAction(message: IncomingSocketMessage, client: SocketClient) {
+  handleAction(message: IncomingSocketMessage<Channel>, clientId: string) {
     const { action, data } = message;
     switch (action) {
-      case GeneralSocketAction.SUBSCRIBE:
-        this.subscribe(client);
+      case CommonSocketAction.SUBSCRIBE:
+        this.subscribe(clientId);
         return;
-      case GeneralSocketAction.UNSUBSCRIBE:
-        this.unsubscribe(client);
+      case CommonSocketAction.UNSUBSCRIBE:
+        this.unsubscribe(clientId);
         return;
     }
     const validator = this.messageValidator?.[action];
@@ -46,37 +46,37 @@ export class SocketChannel {
     if (!handler) {
       throw new WebsocketError(WebsocketErrorMessage.INVALID_ACTION);
     }
-    if (validator) {
-      const isValidData = validator(data);
-      if (!isValidData)
-        throw new WebsocketError(WebsocketErrorMessage.INVALID_DATA);
+    if (!data || (validator && !validator(data))) {
+      throw new WebsocketError(WebsocketErrorMessage.INVALID_DATA);
     }
     try {
-      handler(data!, client);
+      handler(clientId, data);
     } catch (error) {
       console.error("SocketChannel", this.name, "handleAction", "error", error);
+      throw error;
     }
   }
 
-  protected subscribe(client: SocketClient) {
-    this.attendees.set(client.id, true);
+  protected subscribe(clientId: string) {
+    this.attendees.set(clientId, true);
   }
 
-  protected unsubscribe(client: SocketClient) {
-    this.attendees.delete(client.id);
+  protected unsubscribe(clientId: string) {
+    this.attendees.delete(clientId);
   }
 
   hasJoined(id: string): boolean {
     return !!this.attendees.get(id);
   }
 
-  protected emitAll<T extends keyof ISocketChannelEventMap[SocketChannelName]>(
+  protected emitAll<T extends keyof ISocketChannelEventMap[Channel]>(
     eventType: T,
-    data: ISocketChannelEventMap[SocketChannelName][T]
+    data: ISocketChannelEventMap[Channel][T]
   ) {
     for (const [id, _] of this.attendees) {
       const client = SocketPoolInstance.getClient(id);
-      client.send({ channel: this.name, event: { type: eventType, data } });
+      if (!client) this.attendees.delete(id);
+      client?.send({ channel: this.name, event: { type: eventType, data } });
     }
   }
 }
