@@ -47,6 +47,14 @@
       "config": {
         "policies": []
       }
+    },
+    {
+      "method": "POST",
+      "path": "/wallets/deposit",
+      "handler": "wallet.deposit",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

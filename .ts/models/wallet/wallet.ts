@@ -8,5 +8,6 @@ export interface IWalletModel {
   public_key: string;
   private_key: string;
   user: IUserModel;
+  address: string;
   _id: string;
 }

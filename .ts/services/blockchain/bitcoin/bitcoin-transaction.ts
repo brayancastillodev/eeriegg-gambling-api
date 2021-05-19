@@ -1,39 +1,23 @@
-import {
-  BTCTransactionType,
-  IBTCTransactionModel,
-  IWalletModel,
-} from "../../../models";
-import { IBTCTransaction } from "./types";
+import { saveTransaction } from "../../../db-controller/btc-transaction";
+import { BTCTransactionType, IWalletModel } from "../../../models";
+import { IBtcTransaction } from "./types";
 
-export class BitcoinTransactionService {
-  async onTransaction(
-    wallet: IWalletModel["public_key"],
-    transaction: IBTCTransaction
-  ) {
-    const { from, amount, transactionHash } = transaction;
-    const transactionDoc: Omit<
-      IBTCTransactionModel,
-      "_id" | "id" | "wallet"
-    > & {
-      wallet: string;
-    } = {
+export const onIncomingBtcTransaction = async (
+  wallet: IWalletModel["public_key"],
+  transaction: IBtcTransaction
+) => {
+  const { from, amount, transactionHash } = transaction;
+  try {
+    await saveTransaction({
       transactionHash,
       amount,
       type:
         from === wallet
           ? BTCTransactionType.Withdraw
           : BTCTransactionType.Deposit,
-      wallet,
-    };
-    try {
-      await strapi.query("btc-transaction").create(transactionDoc);
-    } catch (error) {
-      console.warn(
-        "BitcoinTransactionService",
-        "onTransaction",
-        "error",
-        error
-      );
-    }
+      walletId: wallet,
+    });
+  } catch (error) {
+    console.warn("BitcoinTransactionService", "onTransaction", "error", error);
   }
-}
+};

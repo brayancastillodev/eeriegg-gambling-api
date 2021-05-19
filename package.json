@@ -15,6 +15,9 @@
     "strapi-to-typescript": "^2.0.9"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "bitcoinjs-lib": "^5.2.0",
+    "dotenv": "^9.0.2",
     "knex": "0.21.18",
     "module-alias": "^2.2.2",
     "sqlite3": "5.0.0",

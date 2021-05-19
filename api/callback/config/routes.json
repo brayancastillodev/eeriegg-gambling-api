@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "method": "POST",
+      "path": "/callback/bc/tx",
+      "handler": "wallet.blockCypherTransaction",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/callback/bc/tx",
+      "handler": "wallet.blockCypherTransaction",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

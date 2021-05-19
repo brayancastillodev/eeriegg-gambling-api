@@ -29,6 +29,11 @@
       "model": "user",
       "required": true,
       "via": "wallets"
+    },
+    "address": {
+      "type": "string",
+      "required": true,
+      "unique": true
     }
   }
 }

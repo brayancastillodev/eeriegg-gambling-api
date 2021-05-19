@@ -1,4 +1,4 @@
-export interface IBTCTransaction {
+export interface IBtcTransaction {
   transactionHash: string;
   amount: number;
   date: Date;

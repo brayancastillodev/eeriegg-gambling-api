@@ -3,4 +3,5 @@ export interface IBTCBalanceUpdate {
   out?: number;
   lock?: number;
   unlock?: number;
+  userId: string;
 }

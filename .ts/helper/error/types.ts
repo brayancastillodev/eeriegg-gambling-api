@@ -6,3 +6,11 @@ export enum WebsocketErrorMessage {
   UNAUTHORIZED = "UNAUTHORIZED",
   UNKNOWN_CLIENT = "UNKNOWN_CLIENT",
 }
+export enum WalletErrorMessage {
+  CREATION_ERROR = "CREATION_ERROR",
+  UNAUTHORIZED = "UNAUTHORIZED",
+}
+
+export enum BalanceErrorMessage {
+  UPDATE_FAILED = "UPDATE_FAILED",
+}

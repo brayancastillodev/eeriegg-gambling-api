@@ -519,7 +519,8 @@
           "id",
           "public_key",
           "private_key",
-          "user"
+          "user",
+          "address"
         ],
         "properties": {
           "id": {
@@ -575,6 +576,9 @@
                 "type": "string"
               }
             }
+          },
+          "address": {
+            "type": "string"
           }
         }
       },
@@ -582,7 +586,8 @@
         "required": [
           "public_key",
           "private_key",
-          "user"
+          "user",
+          "address"
         ],
         "properties": {
           "public_key": {
@@ -592,6 +597,9 @@
             "type": "string"
           },
           "user": {
+            "type": "string"
+          },
+          "address": {
             "type": "string"
           },
           "created_by": {
