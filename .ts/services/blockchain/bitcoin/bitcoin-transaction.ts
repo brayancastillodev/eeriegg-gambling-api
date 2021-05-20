@@ -1,9 +1,9 @@
 import { saveTransaction } from "../../../db-controller/btc-transaction";
-import { BTCTransactionType, IWalletModel } from "../../../models";
+import { BTCTransactionType } from "../../../models";
 import { IBtcTransaction } from "./types";
 
 export const onIncomingBtcTransaction = async (
-  wallet: IWalletModel["public_key"],
+  address: string,
   transaction: IBtcTransaction
 ) => {
   const { from, amount, transactionHash } = transaction;
@@ -12,10 +12,10 @@ export const onIncomingBtcTransaction = async (
       transactionHash,
       amount,
       type:
-        from === wallet
+        from === address
           ? BTCTransactionType.Withdraw
           : BTCTransactionType.Deposit,
-      walletId: wallet,
+      walletId: address,
     });
   } catch (error) {
     console.warn("BitcoinTransactionService", "onTransaction", "error", error);

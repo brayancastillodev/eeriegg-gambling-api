@@ -13,5 +13,5 @@ export const saveWallet = async (doc: {
     address,
     user: userId,
   });
-  return wallet.toObject();
+  return wallet;
 };

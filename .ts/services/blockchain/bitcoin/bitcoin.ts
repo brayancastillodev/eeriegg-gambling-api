@@ -1,4 +1,4 @@
-import bitcoin from "bitcoinjs-lib";
+import * as bitcoin from "bitcoinjs-lib";
 import { saveWallet } from "../../../db-controller/wallet";
 import { IS_PRODUCTION } from "../../../global/env";
 import { WalletErrorMessage } from "../../../helper/error/types";
@@ -23,8 +23,8 @@ export const createWallet = async (userId: string): Promise<IWalletModel> => {
     return saveWallet({
       userId,
       address,
-      privateKey: keyPair.privateKey.toString(),
-      publicKey: keyPair.publicKey.toString(),
+      privateKey: keyPair.privateKey.toString('hex'),
+      publicKey: keyPair.publicKey.toString('hex'),
     });
   } catch (err) {
     console.warn("bitcoin", "createWallet", "error", err);

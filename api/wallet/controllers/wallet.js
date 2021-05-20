@@ -1,16 +1,16 @@
 "use strict";
-
+const bitcoin = require("../../../js/services/blockchain/bitcoin/bitcoin");
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
  */
 
 module.exports = {
-  async deposit(ctx) {
+  async create(ctx) {
     const { id } = ctx?.state?.user;
 
-    if (!id) ctx.throw("unauthorized", 403)
+    if (!id) ctx.unauthorized("unauthorized");
 
-    // TODO: process deposit here
+    return bitcoin.createWallet(ctx.state.user.id);
   },
 };
