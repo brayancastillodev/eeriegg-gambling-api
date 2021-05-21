@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/callback/bc/tx": {
+    "/users/balance-history": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -52,7 +52,7 @@
         },
         "summary": "",
         "tags": [
-          "Callback"
+          "User"
         ],
         "parameters": []
       }
@@ -60,7 +60,7 @@
   },
   "tags": [
     {
-      "name": "Callback"
+      "name": "User"
     }
   ]
 }

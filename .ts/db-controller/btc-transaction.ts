@@ -15,3 +15,9 @@ export const saveTransaction = async (transaction: {
   });
   return doc;
 };
+
+export const getBtcTransactionsUser = (
+  userId: string
+): Promise<IBTCTransactionModel[]> => {
+  return strapi.query("btc-transaction").find({ userId });
+};

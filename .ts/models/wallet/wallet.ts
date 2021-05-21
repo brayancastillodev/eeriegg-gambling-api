@@ -10,4 +10,5 @@ export interface IWalletModel {
   user: IUserModel;
   address: string;
   _id: string;
+  createdAt: Date;
 }

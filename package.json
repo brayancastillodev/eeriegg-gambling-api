@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "dev": "tsc && yarn sts && strapi develop",
+    "dev": "yarn build:ts && strapi develop",
     "start": "strapi start",
-    "build": "tsc && yarn sts && strapi build",
+    "build": "yarn build:ts && strapi build",
+    "build:ts": "tsc && yarn sts",
     "strapi": "strapi",
     "sts": "sts -c .sts.config.js"
   },

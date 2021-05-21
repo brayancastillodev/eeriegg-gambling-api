@@ -15,6 +15,9 @@ const config = {
       interfaceName.length - 6
     )}${name[0].toUpperCase()}${name.substr(1)}`,
   // excludeField: (interfaceName, fieldName) => fieldName === 'hide_field',
-  addField: (interfaceName) => [{ name: "_id", type: "string" }],
+  addField: (interfaceName) => [
+    { name: "_id", type: "string" },
+    { name: "createdAt", type: "Date" },
+  ],
 };
 module.exports = config;

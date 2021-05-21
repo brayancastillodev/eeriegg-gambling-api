@@ -15,4 +15,5 @@ export interface IUserModel {
   blocked?: boolean;
   role?: IRoleModel;
   _id: string;
+  createdAt: Date;
 }

@@ -12,4 +12,5 @@ export interface IRoleModel {
   permissions: IPermissionModel[];
   users: IUserModel[];
   _id: string;
+  createdAt: Date;
 }

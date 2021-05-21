@@ -9,4 +9,5 @@ export interface IBTCBalanceModel {
   locked?: number;
   user: IUserModel;
   _id: string;
+  createdAt: Date;
 }

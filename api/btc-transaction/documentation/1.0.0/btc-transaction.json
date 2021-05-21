@@ -532,8 +532,9 @@
           "id",
           "transactionHash",
           "amount",
-          "wallet",
-          "type"
+          "type",
+          "userId",
+          "address"
         ],
         "properties": {
           "id": {
@@ -544,38 +545,6 @@
           },
           "amount": {
             "type": "integer"
-          },
-          "wallet": {
-            "required": [
-              "id",
-              "public_key",
-              "private_key",
-              "user",
-              "address"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "public_key": {
-                "type": "string"
-              },
-              "private_key": {
-                "type": "string"
-              },
-              "user": {
-                "type": "string"
-              },
-              "address": {
-                "type": "string"
-              },
-              "created_by": {
-                "type": "string"
-              },
-              "updated_by": {
-                "type": "string"
-              }
-            }
           },
           "type": {
             "type": "string",
@@ -590,8 +559,9 @@
         "required": [
           "transactionHash",
           "amount",
-          "wallet",
-          "type"
+          "type",
+          "userId",
+          "address"
         ],
         "properties": {
           "transactionHash": {
@@ -600,15 +570,18 @@
           "amount": {
             "type": "integer"
           },
-          "wallet": {
-            "type": "string"
-          },
           "type": {
             "type": "string",
             "enum": [
               "Deposit",
               "Withdraw"
             ]
+          },
+          "userId": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

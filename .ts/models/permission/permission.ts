@@ -12,4 +12,5 @@ export interface IPermissionModel {
   policy?: string;
   role?: IRoleModel;
   _id: string;
+  createdAt: Date;
 }

@@ -2,8 +2,8 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/callback/bc/tx",
-      "handler": "callback.blockCypherTransaction",
+      "path": "/users/balance-history",
+      "handler": "user.getBalanceHistory",
       "config": {
         "policies": []
       }
