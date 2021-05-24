@@ -1,8 +1,7 @@
 import * as uuid from "uuid";
+import { SocketPoolInstance } from ".";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import { SocketPoolInstance } from "../../singleton/socket";
-import { SocketClient } from "../socket/socket-client";
 import {
   IncomingSocketMessage,
   ISocketChannelActionMap,

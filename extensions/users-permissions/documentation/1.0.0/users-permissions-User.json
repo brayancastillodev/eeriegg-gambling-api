@@ -1259,7 +1259,8 @@
                 "public_key",
                 "private_key",
                 "user",
-                "address"
+                "address",
+                "bc_hook_id"
               ],
               "properties": {
                 "id": {
@@ -1275,6 +1276,9 @@
                   "type": "string"
                 },
                 "address": {
+                  "type": "string"
+                },
+                "bc_hook_id": {
                   "type": "string"
                 },
                 "created_by": {

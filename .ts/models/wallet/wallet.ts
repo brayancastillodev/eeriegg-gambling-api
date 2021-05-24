@@ -9,6 +9,7 @@ export interface IWalletModel {
   private_key: string;
   user: IUserModel;
   address: string;
+  bc_hook_id: string;
   _id: string;
   createdAt: Date;
 }

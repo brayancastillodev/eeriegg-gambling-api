@@ -1,19 +1,16 @@
-import { ChatService } from "../../services/chat/chat";
 import { SocketClient } from "./socket-client";
 import { SocketChannelName } from "./types";
 import { messageParser } from "./message-parser";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { WebsocketErrorMessage } from "../../helper/error/types";
-import {
-  SocketPoolInstance,
-  SocketServiceInstance,
-} from "../../singleton/socket";
-import { GeneralService } from "../../services/general/general";
+import { SocketPoolInstance } from "../socket-pool";
+import { ChatServiceInstance } from "../../services/chat";
+import { GeneralServiceInstance } from "../../services/general";
 
 export class SocketService {
   private channels = {
-    [SocketChannelName.CHAT]: new ChatService(),
-    [SocketChannelName.GENERAL]: new GeneralService(),
+    [SocketChannelName.CHAT]: ChatServiceInstance,
+    [SocketChannelName.GENERAL]: GeneralServiceInstance,
   };
 
   handleIncomingMessage(message: string, clientId: string) {

@@ -34,6 +34,12 @@
       "type": "string",
       "required": true,
       "unique": true
+    },
+    "bc_hook_id": {
+      "type": "string",
+      "required": true,
+      "private": true,
+      "unique": true
     }
   }
 }

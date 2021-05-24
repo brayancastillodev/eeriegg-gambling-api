@@ -1,8 +1,6 @@
 import WebSocket from "ws";
-import {
-  SocketPoolInstance,
-  SocketServiceInstance,
-} from "../../singleton/socket";
+import { SocketServiceInstance } from ".";
+import { SocketPoolInstance } from "../socket-pool";
 import { SocketClient } from "./socket-client";
 
 /**

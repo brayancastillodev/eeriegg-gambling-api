@@ -1,6 +1,6 @@
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import { SocketPoolInstance } from "../../singleton/socket";
+import { SocketPoolInstance } from "../../tools/socket-pool";
 import { SocketChannel } from "../../tools/socket-pool/socket-channel";
 import { SocketChannelName } from "../../tools/socket/types";
 import { IGeneralActionMap } from "./types";

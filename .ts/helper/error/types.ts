@@ -8,7 +8,9 @@ export enum WebsocketErrorMessage {
 }
 export enum WalletErrorMessage {
   CREATION_ERROR = "CREATION_ERROR",
+  CREATION_ERROR_HOOK = "CREATION_ERROR_HOOK",
   UNAUTHORIZED = "UNAUTHORIZED",
+  ALREADY_CREATED = "ALREADY_CREATED",
 }
 
 export enum BalanceErrorMessage {

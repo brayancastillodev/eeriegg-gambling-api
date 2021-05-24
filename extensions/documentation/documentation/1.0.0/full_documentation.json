@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "05/21/2021 11:01:30 PM"
+    "x-generation-date": "05/23/2021 4:22:54 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -4173,7 +4173,8 @@
           "public_key",
           "private_key",
           "user",
-          "address"
+          "address",
+          "bc_hook_id"
         ],
         "properties": {
           "id": {
@@ -4240,7 +4241,8 @@
           "public_key",
           "private_key",
           "user",
-          "address"
+          "address",
+          "bc_hook_id"
         ],
         "properties": {
           "public_key": {
@@ -4253,6 +4255,9 @@
             "type": "string"
           },
           "address": {
+            "type": "string"
+          },
+          "bc_hook_id": {
             "type": "string"
           },
           "created_by": {
@@ -4489,7 +4494,8 @@
                 "public_key",
                 "private_key",
                 "user",
-                "address"
+                "address",
+                "bc_hook_id"
               ],
               "properties": {
                 "id": {
@@ -4505,6 +4511,9 @@
                   "type": "string"
                 },
                 "address": {
+                  "type": "string"
+                },
+                "bc_hook_id": {
                   "type": "string"
                 },
                 "created_by": {
