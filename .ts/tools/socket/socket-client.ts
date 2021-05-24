@@ -2,7 +2,12 @@ import WebSocket from "ws";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { IUserModel } from "../../models";
-import { IWebsocketErrorMessage, OutgoingSocketMessage } from "./types";
+import {
+  ISocketChannelEventMap,
+  IWebsocketErrorMessage,
+  OutgoingSocketMessage,
+  SocketChannelName,
+} from "./types";
 
 /**
  * The `SocketClient` holds the clients socket connection. It is responsible to just communicate with the client.
@@ -48,10 +53,7 @@ export class SocketClient {
     return this._user;
   }
 
-  authenticateUser(user: IUserModel) {
-    if (!user) {
-      throw new WebsocketError(WebsocketErrorMessage.UNAUTHORIZED);
-    }
+  setAuthUser(user: IUserModel) {
     this._user = user;
   }
   /**
@@ -59,8 +61,10 @@ export class SocketClient {
    * send any messages to the client connection.
    * @param response
    */
-  send = (
-    response: OutgoingSocketMessage<any, any> | IWebsocketErrorMessage
+  send = <Channel extends keyof ISocketChannelEventMap>(
+    response:
+      | OutgoingSocketMessage<Channel, keyof ISocketChannelEventMap[Channel]>
+      | IWebsocketErrorMessage
   ): void => {
     if (!this.socket.OPEN) return;
     try {

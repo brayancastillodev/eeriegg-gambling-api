@@ -10,7 +10,7 @@ const PORT = process.env.PORT;
 const PUBLIC_URL_CLIENT = process.env.PUBLIC_URL_CLIENT;
 const NGROK_URL = process.env.NGROK_URL;
 
-if (!PORT) {
+if (IS_DEVELOPMENT && !PORT) {
   throw new Error("PORT not defined in .env");
 }
 

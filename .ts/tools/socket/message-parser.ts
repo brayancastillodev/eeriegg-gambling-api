@@ -5,6 +5,7 @@ import { IncomingSocketMessage, SocketChannelName } from "./types";
 const parseJson = (data: any): any => {
   try {
     return JSON.parse(data);
+    console.log('parse', data)
   } catch (err) {
     console.error("failed to parse JSON string", err);
     throw new WebsocketError(WebsocketErrorMessage.INVALID_MESSAGE);

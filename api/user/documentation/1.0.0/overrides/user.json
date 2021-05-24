@@ -1,9 +1,9 @@
 {
   "paths": {
-    "/callback/bc/tx": {
-      "post": {
+    "/users/balance-history": {
+      "get": {
         "deprecated": false,
-        "description": "Create a new record",
+        "description": "",
         "responses": {
           "200": {
             "description": "response",
@@ -11,7 +11,16 @@
               "application/json": {
                 "schema": {
                   "properties": {
-                    "foo": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "number"
+                    },
+                    "details": {
+                      "type": "string"
+                    },
+                    "date": {
                       "type": "string"
                     }
                   }
@@ -52,25 +61,15 @@
         },
         "summary": "",
         "tags": [
-          "Unclassified"
+          "User"
         ],
-        "requestBody": {
-          "description": "",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewUnclassified"
-              }
-            }
-          }
-        }
+        "parameters": []
       }
     }
   },
   "tags": [
     {
-      "name": "Unclassified"
+      "name": "User"
     }
   ]
 }

@@ -1,8 +1,10 @@
+import { getUser } from "../../db-controller/user";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { SocketPoolInstance } from "../../tools/socket-pool";
 import { SocketChannel } from "../../tools/socket-pool/socket-channel";
 import { SocketChannelName } from "../../tools/socket/types";
+import { verifyToken } from "../../utils/auth";
 import { IGeneralActionMap } from "./types";
 
 export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
@@ -24,13 +26,14 @@ export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
   private async authenticate(clientId: string, token: string) {
     const client = SocketPoolInstance.getClient(clientId);
     try {
-      const { id: userId } = await strapi.plugins[
-        "users-permissions"
-      ].services.jwt.verify(token);
-      const user = await strapi
-        .query("users-permissions")
-        .findOne({ id: userId });
-      client.authenticateUser(user);
+      const { id: userId } = await verifyToken(token);
+      const user = await getUser(userId);
+      if (!user) throw new Error();
+      client.setAuthUser(user);
+      client.send({
+        channel: this.name,
+        event: { type: "authentication", data: { success: true } },
+      });
     } catch (err) {
       throw new WebsocketError(WebsocketErrorMessage.UNAUTHORIZED);
     }

@@ -28,7 +28,7 @@ export class SocketHandler {
             this.unregisterClient(id);
             return;
           }
-          SocketServiceInstance.handleIncomingMessage(id, message);
+          SocketServiceInstance.handleIncomingMessage(message, id);
         } catch (err) {
           this.handleClientError(err, id);
         }
