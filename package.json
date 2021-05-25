@@ -12,6 +12,7 @@
     "sts": "sts -c .sts.config.js"
   },
   "devDependencies": {
+    "@types/ioredis": "^4.26.4",
     "@types/uuid": "^8.3.0",
     "strapi-to-typescript": "^2.0.9",
     "typescript": "^4.2.4"
@@ -20,6 +21,7 @@
     "axios": "^0.21.1",
     "bitcoinjs-lib": "^5.2.0",
     "dotenv": "^9.0.2",
+    "ioredis": "^4.27.3",
     "knex": "0.21.18",
     "module-alias": "^2.2.2",
     "sqlite3": "5.0.0",

@@ -2,6 +2,7 @@ import * as uuid from "uuid";
 import { SocketPoolInstance } from ".";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
+import { PubSub } from "../redis/pubsub";
 import {
   IncomingSocketMessage,
   ISocketChannelActionMap,
@@ -13,7 +14,13 @@ import {
 export class SocketChannel<Channel extends SocketChannelName> {
   private attendees = new Map<string, boolean>();
   public readonly id = uuid.v1();
-  constructor(public readonly name: Channel) {}
+  protected pubsub!: ReturnType<typeof PubSub>;
+
+  constructor(public readonly name: Channel) {
+    this.pubsub = PubSub(name);
+    this.pubsub.subscribe();
+  }
+
   protected actions:
     | {
         [A in keyof ISocketChannelActionMap[Channel]]: (
@@ -72,10 +79,6 @@ export class SocketChannel<Channel extends SocketChannelName> {
     eventType: T,
     data: ISocketChannelEventMap[Channel][T]
   ) {
-    for (const [id, _] of this.attendees) {
-      const client = SocketPoolInstance.getClient(id);
-      if (!client) this.attendees.delete(id);
-      client?.send({ channel: this.name, event: { type: eventType, data } });
-    }
+
   }
 }

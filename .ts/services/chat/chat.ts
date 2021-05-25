@@ -1,3 +1,4 @@
+import { redis } from "../../tools/redis";
 import { SocketChannel } from "../../tools/socket-pool/socket-channel";
 import { SocketChannelName } from "../../tools/socket/types";
 import { IChatActionMap, IChatIncomingMessage } from "./types";

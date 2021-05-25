@@ -29,7 +29,6 @@ export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
       const { id: userId } = await verifyToken(token);
       const user = await getUser(userId);
       if (!user) throw new Error();
-      client.setAuthUser(user);
       client.send({
         channel: this.name,
         event: { type: "authentication", data: { success: true } },

@@ -1,5 +1,9 @@
 import { SocketClient } from "./socket-client";
-import { SocketChannelName } from "./types";
+import {
+  ISocketChannelEventMap,
+  OutgoingSocketMessage,
+  SocketChannelName,
+} from "./types";
 import { messageParser } from "./message-parser";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { WebsocketErrorMessage } from "../../helper/error/types";
@@ -32,5 +36,10 @@ export class SocketService {
         error: error?.message || "unknown error",
       });
     }
+  }
+
+  handlePublish(channel: string, message: string) {
+    const json = JSON.parse(message);
+
   }
 }
