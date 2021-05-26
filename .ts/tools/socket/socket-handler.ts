@@ -64,8 +64,9 @@ export class SocketHandler {
       const client = SocketPoolInstance.getClient(clientId);
       client.terminateConnection();
       SocketPoolInstance.removeClient(client.id);
+      SocketServiceInstance.unsubscribeClientFromAllChannels(client.id);
     } catch (err) {
-      console.info("SocketHandler", "unregisterClient", "not found", clientId);
+      console.info("SocketHandler", "unregisterClient", "client not found", clientId);
     }
   };
 

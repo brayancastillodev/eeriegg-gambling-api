@@ -6,7 +6,6 @@ import {
   ISocketChannelEventMap,
   IWebsocketErrorMessage,
   OutgoingSocketMessage,
-  SocketChannelName,
 } from "./types";
 
 /**
@@ -53,6 +52,9 @@ export class SocketClient {
     return this._user;
   }
 
+  setAuthUser(user: IUserModel) {
+    this._user = user;
+  }
   /**
    * Messages to the client must a specific interface. If the connection state is not `OPEN` we do not
    * send any messages to the client connection.

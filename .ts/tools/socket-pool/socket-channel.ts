@@ -1,5 +1,4 @@
 import * as uuid from "uuid";
-import { SocketPoolInstance } from ".";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { PubSub } from "../redis/pubsub";
@@ -12,9 +11,12 @@ import {
 } from "../socket/types";
 
 export class SocketChannel<Channel extends SocketChannelName> {
-  private attendees = new Map<string, boolean>();
   public readonly id = uuid.v1();
   protected pubsub!: ReturnType<typeof PubSub>;
+
+  protected onSubscribe: ((clientId: string) => void) | undefined;
+
+  protected onUnsubscribe: ((clientId: string) => void) | undefined;
 
   constructor(public readonly name: Channel) {
     this.pubsub = PubSub(name);
@@ -63,22 +65,23 @@ export class SocketChannel<Channel extends SocketChannelName> {
     }
   }
 
-  protected subscribe(clientId: string) {
-    this.attendees.set(clientId, true);
+  public subscribe(clientId: string) {
+    this.pubsub.join(clientId);
+    this.onSubscribe && this.onSubscribe(clientId);
   }
 
-  protected unsubscribe(clientId: string) {
-    this.attendees.delete(clientId);
+  public unsubscribe(clientId: string) {
+    this.pubsub.leave(clientId);
+    this.onUnsubscribe && this.onUnsubscribe(clientId);
   }
 
-  hasJoined(id: string): boolean {
-    return !!this.attendees.get(id);
-  }
-
-  protected emitAll<T extends keyof ISocketChannelEventMap[Channel]>(
+  protected publish<T extends keyof ISocketChannelEventMap[Channel]>(
     eventType: T,
     data: ISocketChannelEventMap[Channel][T]
   ) {
-
+    this.pubsub.publish({
+      channel: this.name,
+      event: { type: eventType, data },
+    });
   }
 }

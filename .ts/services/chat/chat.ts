@@ -1,4 +1,3 @@
-import { redis } from "../../tools/redis";
 import { SocketChannel } from "../../tools/socket-pool/socket-channel";
 import { SocketChannelName } from "../../tools/socket/types";
 import { IChatActionMap, IChatIncomingMessage } from "./types";
@@ -30,8 +29,22 @@ export class ChatService extends SocketChannel<SocketChannelName.CHAT> {
     return data && typeof data === "object" && data.text && data.user?.id;
   }
 
+  protected onSubscribe: (clientId: string) => void = (clientId: string) => {
+    this.publish("joined", {
+      userId: clientId,
+      time: new Date(),
+    });
+  };
+
+  protected onUnsubscribe: (clientId: string) => void = (clientId: string) => {
+    this.publish("left", {
+      userId: clientId,
+      time: new Date(),
+    });
+  };
+
   onMessage(clientId: string, message: IChatIncomingMessage) {
-    this.emitAll("message", {
+    this.publish("message", {
       text: message.text,
       user: { id: "id", name: "anonymous" },
       time: new Date(),

@@ -1,9 +1,5 @@
 import { SocketClient } from "./socket-client";
-import {
-  ISocketChannelEventMap,
-  OutgoingSocketMessage,
-  SocketChannelName,
-} from "./types";
+import { SocketChannelName } from "./types";
 import { messageParser } from "./message-parser";
 import { WebsocketError } from "../../helper/error/websocket-error";
 import { WebsocketErrorMessage } from "../../helper/error/types";
@@ -32,14 +28,15 @@ export class SocketService {
         client = SocketPoolInstance.getClient(clientId);
       }
       client?.send({
-        code: error?.code || undefined,
+        code: error?.code || 1,
         error: error?.message || "unknown error",
       });
     }
   }
 
-  handlePublish(channel: string, message: string) {
-    const json = JSON.parse(message);
-
+  unsubscribeClientFromAllChannels(clientId: string) {
+    Object.values(this.channels).forEach((channel) =>
+      channel.unsubscribe(clientId)
+    );
   }
 }
