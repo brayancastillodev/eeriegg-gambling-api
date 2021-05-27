@@ -1,3 +1,4 @@
+
 export class GamblingService {
   async getRandomInteger(max: number): Promise<number> {
 

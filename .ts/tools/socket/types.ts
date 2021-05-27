@@ -1,6 +1,10 @@
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { IChatActionMap, IChatEventMap } from "../../services/chat/types";
 import {
+  ICoinFlipActionMap,
+  ICoinFlipEventMap,
+} from "../../services/coin-flip/types";
+import {
   IGeneralActionMap,
   IGeneralEventMap,
 } from "../../services/general/types";
@@ -8,7 +12,9 @@ import {
 export enum SocketChannelName {
   CHAT = "chat",
   GENERAL = "general",
+  COIN_FLIP = "coin_flip",
 }
+
 export enum CommonSocketAction {
   SUBSCRIBE = "subscribe",
   UNSUBSCRIBE = "unsubscribe",
@@ -16,10 +22,12 @@ export enum CommonSocketAction {
 export interface ISocketChannelEventMap {
   [SocketChannelName.GENERAL]: IGeneralEventMap;
   [SocketChannelName.CHAT]: IChatEventMap;
+  [SocketChannelName.COIN_FLIP]: ICoinFlipEventMap;
 }
 export interface ISocketChannelActionMap {
   [SocketChannelName.CHAT]: IChatActionMap;
   [SocketChannelName.GENERAL]: IGeneralActionMap;
+  [SocketChannelName.COIN_FLIP]: ICoinFlipActionMap;
 }
 
 export type IncomingSocketMessage<

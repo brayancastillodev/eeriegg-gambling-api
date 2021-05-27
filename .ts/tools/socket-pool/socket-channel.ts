@@ -12,14 +12,14 @@ import {
 
 export class SocketChannel<Channel extends SocketChannelName> {
   public readonly id = uuid.v1();
-  protected pubsub!: ReturnType<typeof PubSub>;
+  protected pubsub!: PubSub;
 
   protected onSubscribe: ((clientId: string) => void) | undefined;
 
   protected onUnsubscribe: ((clientId: string) => void) | undefined;
 
   constructor(public readonly name: Channel) {
-    this.pubsub = PubSub(name);
+    this.pubsub = new PubSub(name);
     this.pubsub.subscribe();
   }
 
@@ -28,7 +28,7 @@ export class SocketChannel<Channel extends SocketChannelName> {
         [A in keyof ISocketChannelActionMap[Channel]]: (
           clientId: string,
           message: ISocketChannelActionMap[Channel][A]
-        ) => void;
+        ) => void | Promise<void>;
       }
     | undefined;
   protected messageValidator:
