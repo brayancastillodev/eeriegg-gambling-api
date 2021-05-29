@@ -6,19 +6,21 @@ import { WebsocketErrorMessage } from "../../helper/error/types";
 import { SocketPoolInstance } from "../socket-pool";
 import { ChatServiceInstance } from "../../services/chat";
 import { GeneralServiceInstance } from "../../services/general";
+import { CoinFlipServiceInstance } from "../../services/coin-flip";
 
 export class SocketService {
   private channels = {
     [SocketChannelName.CHAT]: ChatServiceInstance,
     [SocketChannelName.GENERAL]: GeneralServiceInstance,
+    [SocketChannelName.COIN_FLIP]: CoinFlipServiceInstance,
   };
 
-  handleIncomingMessage(message: string, clientId: string) {
+  async handleIncomingMessage(message: string, clientId: string) {
     let client: SocketClient | undefined;
     try {
       const parsedMessage = messageParser(message);
       const channel = this.channels[parsedMessage.channel];
-      channel.handleAction(parsedMessage, clientId);
+      await channel.handleAction(parsedMessage, clientId);
     } catch (error) {
       console.warn("SocketService", "handleIncomingMessage", "error", error);
       if (

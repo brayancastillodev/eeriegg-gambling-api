@@ -1,7 +1,9 @@
 import * as uuid from "uuid";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import { PubSub } from "../redis/pubsub";
+import { PubSub } from "../redis";
+import { PubSub as PubSubRedis } from "../redis/pubsub";
+import { PubSubMock } from "../redis/pubsub-mock";
 import {
   IncomingSocketMessage,
   ISocketChannelActionMap,
@@ -12,7 +14,7 @@ import {
 
 export class SocketChannel<Channel extends SocketChannelName> {
   public readonly id = uuid.v1();
-  protected pubsub!: PubSub;
+  protected pubsub!: PubSubRedis | PubSubMock;
 
   protected onSubscribe: ((clientId: string) => void) | undefined;
 
@@ -28,7 +30,7 @@ export class SocketChannel<Channel extends SocketChannelName> {
         [A in keyof ISocketChannelActionMap[Channel]]: (
           clientId: string,
           message: ISocketChannelActionMap[Channel][A]
-        ) => void | Promise<void>;
+        ) => Promise<void>;
       }
     | undefined;
   protected messageValidator:
@@ -39,7 +41,10 @@ export class SocketChannel<Channel extends SocketChannelName> {
       }
     | undefined;
 
-  handleAction(message: IncomingSocketMessage<Channel>, clientId: string) {
+  async handleAction(
+    message: IncomingSocketMessage<Channel>,
+    clientId: string
+  ) {
     const { action, data } = message;
     switch (action) {
       case CommonSocketAction.SUBSCRIBE:
@@ -58,7 +63,7 @@ export class SocketChannel<Channel extends SocketChannelName> {
       throw new WebsocketError(WebsocketErrorMessage.INVALID_DATA);
     }
     try {
-      handler(clientId, data);
+      await handler(clientId, data);
     } catch (error) {
       console.error("SocketChannel", this.name, "handleAction", "error", error);
       throw error;

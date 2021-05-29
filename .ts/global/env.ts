@@ -1,8 +1,9 @@
 require("dotenv").config();
 
-const IS_PRODUCTION = process.env.NODE_ENV === "production";
-const IS_TEST = process.env.NODE_ENV === "test";
-const IS_DEVELOPMENT = process.env.NODE_ENV === "development";
+const NODE_ENV = process.env.NODE_ENV;
+const IS_PRODUCTION = NODE_ENV === "production";
+const IS_TEST = NODE_ENV === "test";
+const IS_DEVELOPMENT = NODE_ENV === "development";
 const BLOCK_CYPHER_CHAIN = process.env.BLOCK_CYPHER_CHAIN;
 const BLOCK_CYPHER_TOKEN = process.env.BLOCK_CYPHER_TOKEN;
 const PORT = process.env.PORT;
@@ -23,6 +24,7 @@ const PUBLIC_URL = IS_PRODUCTION
   : `http://localhost:${PORT}`;
 
 export {
+  NODE_ENV,
   PORT,
   PUBLIC_URL,
   IS_PRODUCTION,
@@ -31,5 +33,5 @@ export {
   BLOCK_CYPHER_CHAIN,
   BLOCK_CYPHER_TOKEN,
   NGROK_URL,
-  PUBLIC_URL_CLIENT
+  PUBLIC_URL_CLIENT,
 };

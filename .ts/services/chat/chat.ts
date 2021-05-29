@@ -11,9 +11,9 @@ export class ChatService extends SocketChannel<SocketChannelName.CHAT> {
     [A in keyof IChatActionMap]: (
       clientId: string,
       message: IChatActionMap[A]
-    ) => void;
+    ) => Promise<void>;
   } = {
-    send: (clientId: string, message: IChatIncomingMessage) =>
+    send: async (clientId: string, message: IChatIncomingMessage) =>
       this.onMessage(clientId, message),
   };
 
@@ -26,7 +26,7 @@ export class ChatService extends SocketChannel<SocketChannelName.CHAT> {
   private static validateIncomingChatMessage(
     data: any
   ): data is IChatIncomingMessage {
-    return data && typeof data === "object" && data.text && data.user?.id;
+    return data && typeof data === "object" && data.text;
   }
 
   protected onSubscribe: (clientId: string) => void = (clientId: string) => {

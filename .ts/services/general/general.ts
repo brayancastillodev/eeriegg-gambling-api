@@ -16,11 +16,10 @@ export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
     [A in keyof IGeneralActionMap]: (
       clientId: string,
       message: IGeneralActionMap[A]
-    ) => void;
+    ) => Promise<void>;
   } = {
-    authenticate: (clientId: string, { token }: { token: string }) => {
-      this.authenticate(clientId, token);
-    },
+    authenticate: async (clientId: string, { token }: { token: string }) =>
+      this.authenticate(clientId, token),
   };
 
   private async authenticate(clientId: string, token: string) {

@@ -18,32 +18,33 @@ export class CoinFlipService extends SocketChannel<SocketChannelName.COIN_FLIP> 
     [A in keyof ICoinFlipActionMap]: (
       clientId: string,
       message: ICoinFlipActionMap[A]
-    ) => void | Promise<void>;
+    ) => Promise<void>;
   } = {
-    create: (clientId, message) => this.create(clientId, message),
+    create: async (clientId, message) => this.create(clientId, message),
+    confirm: async (clientId) => {},
+    join: async (clientId) => {},
+    leave: async (clientId) => {},
+    flip: async (clientId) => {},
   };
 
-  protected onSubscribe: (clientId: string) => void = (clientId: string) => {
+  protected onSubscribe: (clientId: string) => void = (clientId: string) => {};
 
-  };
-
-  protected onUnsubscribe: (clientId: string) => void = (clientId: string) => {
-
-  };
+  protected onUnsubscribe: (clientId: string) => void = (
+    clientId: string
+  ) => {};
 
   private async create(clientId: string, message: undefined) {
     const game = new Game(uuid.v4());
-    this.gameStore.set(game.id, clientId)
+    this.gameStore.set(game.id, clientId);
     this.games.set(game.id, game);
-    await game.join(clientId);
+    // await game.join(clientId);
     this.publish("created", {
       gameId: game.id,
       time: new Date(),
     });
-
   }
 
   private async join(gameId: string) {
-    const game = await;
+    // const game = await;
   }
 }
