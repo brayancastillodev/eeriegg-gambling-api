@@ -1,5 +1,5 @@
-import { SocketChannel } from "../../tools/socket-pool/socket-channel";
-import { SocketChannelName } from "../../tools/socket/types";
+import { SocketChannelName } from "../../tools/socket";
+import { SocketChannel } from "../../tools/socket/channel/socket-channel";
 import { IChatActionMap, IChatIncomingMessage } from "./types";
 
 export class ChatService extends SocketChannel<SocketChannelName.CHAT> {

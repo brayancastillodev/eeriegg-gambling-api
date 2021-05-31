@@ -1,7 +1,7 @@
 import uuid from "uuid";
 import { Game } from "../../tools/game/game";
-import { SocketChannel } from "../../tools/socket-pool/socket-channel";
-import { SocketChannelName } from "../../tools/socket/types";
+import { SocketChannel } from "../../tools/socket/channel/socket-channel";
+import { SocketChannelName } from "../../tools/socket";
 import { ICoinFlipActionMap } from "./types";
 import { RedisStore } from "../../tools/redis/redis-store";
 import { RedisStoreName } from "../../tools/redis/types";
@@ -37,14 +37,18 @@ export class CoinFlipService extends SocketChannel<SocketChannelName.COIN_FLIP> 
     const game = new Game(uuid.v4());
     this.gameStore.set(game.id, clientId);
     this.games.set(game.id, game);
-    // await game.join(clientId);
+    await game.join(clientId);
     this.publish("created", {
       gameId: game.id,
       time: new Date(),
     });
+    game.subscribe((event)=> {
+
+    })
   }
 
   private async join(gameId: string) {
-    // const game = await;
+    const game = await this.gameStore.get(gameId)
+    game
   }
 }

@@ -1,11 +1,13 @@
-import { getUser } from "../../db-controller/user";
+import { getUser } from "../../db-controllers/user";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import { SocketPoolInstance } from "../../tools/socket-pool";
-import { SocketChannel } from "../../tools/socket-pool/socket-channel";
-import { SocketChannelName } from "../../tools/socket/types";
-import { verifyToken } from "../../utils/auth";
+import {
+  SocketPoolInstance,
+  SocketChannelName,
+} from "../../tools/socket";
+import { verifyToken } from "../../helper/utils/auth";
 import { IGeneralActionMap } from "./types";
+import { SocketChannel } from "../../tools/socket/channel/socket-channel";
 
 export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
   constructor() {

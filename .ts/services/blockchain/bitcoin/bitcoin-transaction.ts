@@ -1,4 +1,4 @@
-import { saveTransaction } from "../../../db-controller/btc-transaction";
+import { saveTransaction } from "../../../db-controllers/btc-transaction";
 import { BTCTransactionType } from "../../../models";
 import { IBtcTransaction } from "./types";
 

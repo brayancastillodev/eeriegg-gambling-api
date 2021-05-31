@@ -1,4 +1,4 @@
-import { saveWallet, updateHookId } from "../../db-controller/wallet";
+import { saveWallet, updateHookId } from "../../db-controllers/wallet";
 import { WalletErrorMessage } from "../../helper/error/types";
 import { WalletError } from "../../helper/error/wallet-error";
 import { createBtcWallet } from "../blockchain/bitcoin/bitcoin";

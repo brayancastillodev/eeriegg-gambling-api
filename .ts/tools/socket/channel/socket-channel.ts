@@ -1,16 +1,16 @@
 import * as uuid from "uuid";
-import { WebsocketErrorMessage } from "../../helper/error/types";
-import { WebsocketError } from "../../helper/error/websocket-error";
-import { PubSub } from "../redis";
-import { PubSub as PubSubRedis } from "../redis/pubsub";
-import { PubSubMock } from "../redis/pubsub-mock";
+import { WebsocketErrorMessage } from "../../../helper/error/types";
+import { WebsocketError } from "../../../helper/error/websocket-error";
+import { PubSub } from "../../redis";
+import { PubSub as PubSubRedis } from "../../redis/pubsub";
+import { PubSubMock } from "../../redis/pubsub-mock";
 import {
   IncomingSocketMessage,
   ISocketChannelActionMap,
   ISocketChannelEventMap,
   CommonSocketAction,
   SocketChannelName,
-} from "../socket/types";
+} from "../types";
 
 export class SocketChannel<Channel extends SocketChannelName> {
   public readonly id = uuid.v1();
@@ -41,7 +41,7 @@ export class SocketChannel<Channel extends SocketChannelName> {
       }
     | undefined;
 
-  async handleAction(
+  public async handleAction(
     message: IncomingSocketMessage<Channel>,
     clientId: string
   ) {
@@ -70,21 +70,28 @@ export class SocketChannel<Channel extends SocketChannelName> {
     }
   }
 
-  public subscribe(clientId: string) {
-    this.pubsub.join(clientId);
+  public async hasJoined(clientId: string): Promise<boolean> {
+    return this.pubsub.hasJoined(clientId);
+  }
+
+  public async subscribe(clientId: string) {
+    await this.pubsub.join(clientId);
     this.onSubscribe && this.onSubscribe(clientId);
   }
 
-  public unsubscribe(clientId: string) {
-    this.pubsub.leave(clientId);
-    this.onUnsubscribe && this.onUnsubscribe(clientId);
+  public async unsubscribe(clientId: string) {
+    const hasJoined = await this.pubsub.hasJoined(clientId);
+    if (hasJoined) {
+      await this.pubsub.leave(clientId);
+      this.onUnsubscribe && this.onUnsubscribe(clientId);
+    }
   }
 
-  protected publish<T extends keyof ISocketChannelEventMap[Channel]>(
+  protected async publish<T extends keyof ISocketChannelEventMap[Channel]>(
     eventType: T,
     data: ISocketChannelEventMap[Channel][T]
   ) {
-    this.pubsub.publish({
+    await this.pubsub.publish({
       channel: this.name,
       event: { type: eventType, data },
     });

@@ -1,4 +1,4 @@
-import { SocketPoolInstance } from "../socket-pool";
+import { SocketPoolInstance } from "../socket/pool";
 import { ISocketChannelEventMap, OutgoingSocketMessage } from "../socket/types";
 
 export type EventCallback<DataType> = (data: DataType) => void;
@@ -21,15 +21,20 @@ export class PubSubMock<
     console.log("PubSubMock", this.id, "subscribe");
   }
 
-  unsubscribe() {}
+  async unsubscribe() {}
 
-  public join = (clientId: string) => {
+  async hasJoined(clientId: string): Promise<boolean> {
+    const client = this.listeners[clientId];
+    return !!client;
+  }
+
+  public join = async (clientId: string) => {
     this.listeners[clientId] = true;
   };
 
   on(channel: string, event: (message: string) => void) {}
 
-  public leave = (clientId: string) => {
+  public leave = async (clientId: string) => {
     delete this.listeners[clientId];
   };
 

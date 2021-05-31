@@ -1,6 +1,6 @@
-import { WebsocketErrorMessage } from "../../helper/error/types";
-import { WebsocketError } from "../../helper/error/websocket-error";
-import { IncomingSocketMessage, SocketChannelName } from "./types";
+import { WebsocketErrorMessage } from "../error/types";
+import { WebsocketError } from "../error/websocket-error";
+import { IncomingSocketMessage, SocketChannelName } from "../../tools/socket/types";
 
 const parseJson = (data: any): any => {
   try {

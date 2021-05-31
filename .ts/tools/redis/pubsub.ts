@@ -1,4 +1,4 @@
-import { SocketPoolInstance } from "../socket-pool";
+import { SocketPoolInstance } from "../socket/pool";
 import { ISocketChannelEventMap, OutgoingSocketMessage } from "../socket/types";
 import { getRedisClient } from "./redis";
 import { IPubSubEvent } from "./types";
@@ -49,5 +49,10 @@ export class PubSub<
   }
   async leave(clientId: string) {
     await this.publisher.del(clientId);
+  }
+
+  async hasJoined(clientId: string): Promise<boolean> {
+    const client = await this.publisher.get(clientId);
+    return !!client;
   }
 }

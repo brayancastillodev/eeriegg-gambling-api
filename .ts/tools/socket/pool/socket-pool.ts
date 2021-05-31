@@ -1,7 +1,7 @@
-import { SocketClient } from "../socket/socket-client";
+import { SocketClient } from "../socket-client";
 import WebSocket from "ws";
-import { WebsocketError } from "../../helper/error/websocket-error";
-import { WebsocketErrorMessage } from "../../helper/error/types";
+import { WebsocketError } from "../../../helper/error/websocket-error";
+import { WebsocketErrorMessage } from "../../../helper/error/types";
 
 export class SocketPool {
   private sockets = new Map<string, SocketClient>();

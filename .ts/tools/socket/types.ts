@@ -1,13 +1,13 @@
 import { WebsocketErrorMessage } from "../../helper/error/types";
-import { IChatActionMap, IChatEventMap } from "../../services/chat/types";
+import { IChatActionMap, IChatEventMap } from "../../channels/chat/types";
 import {
   ICoinFlipActionMap,
   ICoinFlipEventMap,
-} from "../../services/coin-flip/types";
+} from "../../channels/coin-flip/types";
 import {
   IGeneralActionMap,
   IGeneralEventMap,
-} from "../../services/general/types";
+} from "../../channels/general/types";
 
 export enum SocketChannelName {
   CHAT = "chat",
