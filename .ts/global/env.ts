@@ -7,7 +7,9 @@ const IS_DEVELOPMENT = NODE_ENV === "development";
 const BLOCK_CYPHER_CHAIN = process.env.BLOCK_CYPHER_CHAIN;
 const BLOCK_CYPHER_TOKEN = process.env.BLOCK_CYPHER_TOKEN;
 const PORT = process.env.PORT;
-
+const REDIS_PORT = Number(process.env.REDIS_PORT);
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 const PUBLIC_URL_CLIENT = process.env.PUBLIC_URL_CLIENT;
 const NGROK_URL = process.env.NGROK_URL;
 
@@ -34,4 +36,7 @@ export {
   BLOCK_CYPHER_TOKEN,
   NGROK_URL,
   PUBLIC_URL_CLIENT,
+  REDIS_PORT,
+  REDIS_HOST,
+  REDIS_PASSWORD,
 };

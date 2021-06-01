@@ -1,6 +1,6 @@
 const {
   getBtcTransactionsUser,
-} = require("../../../js/db-controller/btc-transaction");
+} = require("../../../js/db-controllers/btc-transaction");
 
 module.exports = {
   async getBalanceHistory(ctx) {
@@ -22,4 +22,7 @@ module.exports = {
       };
     });
   },
+  async getBtcWallet(ctx) {
+
+  }
 };

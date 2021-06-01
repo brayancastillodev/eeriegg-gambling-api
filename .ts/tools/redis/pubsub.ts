@@ -1,9 +1,7 @@
 import { SocketPoolInstance } from "../socket/pool";
 import { ISocketChannelEventMap, OutgoingSocketMessage } from "../socket/types";
-import { getRedisClient } from "./redis";
+import { getRedisClient, subscriber } from "./redis";
 import { IPubSubEvent } from "./types";
-
-const subscriber = getRedisClient(`main:sub`);
 
 export class PubSub<
   Channel extends keyof ISocketChannelEventMap = keyof ISocketChannelEventMap
@@ -12,7 +10,7 @@ export class PubSub<
     console.log("PubSub", id, "init");
   }
   private publisher = getRedisClient(`main:pub:${this.id}`);
-  subscribe(event?: (data: OutgoingSocketMessage<Channel>) => void) {
+  subscribe(event?: (data: IPubSubEvent<Channel>) => void) {
     console.log("PubSub", this.id, "subscribe");
     subscriber.on("message", (_id, message) => {
       if (this.id !== _id) return;
@@ -31,7 +29,7 @@ export class PubSub<
           client.send(eventData.data);
         }
       }
-      event && event(eventData.data);
+      event && event(eventData);
     });
     subscriber.subscribe(this.id);
   }
