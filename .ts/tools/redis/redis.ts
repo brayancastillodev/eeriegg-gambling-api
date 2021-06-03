@@ -1,7 +1,25 @@
 import Redis from "ioredis";
-import { REDIS_PORT, REDIS_HOST, REDIS_PASSWORD } from "../../global/env";
+import {
+  REDIS_PORT,
+  REDIS_HOST,
+  REDIS_PASSWORD,
+  IS_DEVELOPMENT,
+} from "../../global/env";
 
 const connections: Map<string, Redis.Redis> = new Map();
+
+const options: Redis.RedisOptions = {
+  port: REDIS_PORT, // Redis port
+  host: REDIS_HOST, // Redis host
+  db: 0,
+  password: REDIS_PASSWORD,
+  tls: { rejectUnauthorized: false },
+};
+const options_dev: Redis.RedisOptions = {
+  port: REDIS_PORT, // Redis port
+  host: REDIS_HOST, // Redis host
+  db: 0,
+};
 
 export const getRedisClient = (name: string) => {
   const client = connections.get(name);
@@ -9,16 +27,7 @@ export const getRedisClient = (name: string) => {
     client.flushdb();
     return client;
   }
-  const _client = new Redis({
-    port: REDIS_PORT, // Redis port
-    host: REDIS_HOST, // Redis host
-    family: 4, // 4 (IPv4) or 6 (IPv6)
-    db: 0,
-    password: REDIS_PASSWORD,
-    tls: {
-      rejectUnauthorized: true,
-    },
-  });
+  const _client = new Redis(IS_DEVELOPMENT ? options_dev : options);
   connections.set(name, _client);
   _client.flushdb();
   return _client;

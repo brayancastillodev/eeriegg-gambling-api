@@ -1,3 +1,3 @@
-import { CoinFlipService } from "./coin-flip";
+import { CoinFlipChannel } from "./coin-flip";
 
-export const CoinFlipServiceInstance = new CoinFlipService();
+export const CoinFlipChannelInstance = new CoinFlipChannel();

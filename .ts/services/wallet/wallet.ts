@@ -8,10 +8,10 @@ import {
 } from "../blockchain/bitcoin/block-cypher";
 
 export class WalletService {
-  async createWallet(userId: string) {
+  async getUserBtcWallet(userId: string) {
     const doc = await strapi.query("wallet").findOne({ user: userId });
     if (doc) {
-      throw new WalletError(WalletErrorMessage.ALREADY_CREATED);
+      return doc
     }
     const wallet = await createBtcWallet();
     const res = await assignWalletToUser(userId.toString(), wallet.address);

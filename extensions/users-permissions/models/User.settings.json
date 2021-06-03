@@ -59,9 +59,12 @@
       "plugin": "users-permissions",
       "configurable": false
     },
-    "wallets": {
-      "via": "user",
-      "collection": "wallet"
+    "wallet": {
+      "model": "wallet",
+      "via": "user"
+    },
+    "image_url": {
+      "type": "string"
     }
   }
 }

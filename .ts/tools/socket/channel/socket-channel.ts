@@ -2,8 +2,6 @@ import * as uuid from "uuid";
 import { WebsocketErrorMessage } from "../../../helper/error/types";
 import { WebsocketError } from "../../../helper/error/websocket-error";
 import { PubSub } from "../../redis";
-import { PubSub as PubSubRedis } from "../../redis/pubsub";
-import { PubSubMock } from "../../redis/pubsub-mock";
 import {
   IncomingSocketMessage,
   ISocketChannelActionMap,
@@ -14,8 +12,8 @@ import {
 
 export class SocketChannel<Channel extends SocketChannelName> {
   public readonly id = uuid.v1();
-  protected pubsub!: PubSubRedis | PubSubMock;
-
+  protected pubsub!: PubSub;
+  public readonly auth: boolean = true;
   protected onSubscribe: ((clientId: string) => void) | undefined;
 
   protected onUnsubscribe: ((clientId: string) => void) | undefined;

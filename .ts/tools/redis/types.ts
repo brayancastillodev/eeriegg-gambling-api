@@ -7,7 +7,7 @@ export interface IPubSubEvent<
   data: OutgoingSocketMessage<Channel>;
 }
 
-
 export enum RedisStoreName {
-  GAMES = 'games'
+  JOBS = "jobs",
+  STATE_GAME = "state:game",
 }

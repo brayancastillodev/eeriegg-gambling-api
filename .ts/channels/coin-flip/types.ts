@@ -10,6 +10,24 @@ export interface ICoinFlipActionMap {
   join: { gameId: string };
   create: undefined;
   leave: { gameId: string };
-  flip: undefined;
+  start: { gameId: string };
   confirm: undefined;
+}
+
+export interface ICoinFlipJobParams {
+  gameId: string;
+  player1: string;
+  player2: string;
+}
+export interface ICoinFlipGameStateUpdate {
+  player1?: string;
+  player2?: string;
+  result?: {
+    winner: string;
+    value: number;
+  };
+}
+export interface ICoinFlipGameState extends ICoinFlipGameStateUpdate {
+  id: string;
+  lastUpdate: Date;
 }

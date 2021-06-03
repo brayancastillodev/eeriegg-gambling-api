@@ -1,3 +1,3 @@
-import { ChatService } from "./chat";
+import { ChatChannel } from "./chat";
 
-export const ChatServiceInstance = new ChatService();
+export const ChatChannelInstance = new ChatChannel();

@@ -573,11 +573,11 @@
               "role": {
                 "type": "string"
               },
-              "wallets": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+              "wallet": {
+                "type": "string"
+              },
+              "image_url": {
+                "type": "string"
               },
               "created_by": {
                 "type": "string"

@@ -4,4 +4,5 @@ declare namespace strapi {
   const services;
   const utils;
   const query;
+  const server;
 }

@@ -1,8 +1,7 @@
-import { SocketChannelName } from "../../tools/socket";
-import { SocketChannel } from "../../tools/socket/channel/socket-channel";
+import { SocketChannel, SocketChannelName } from "../../tools/socket";
 import { IChatActionMap, IChatIncomingMessage } from "./types";
 
-export class ChatService extends SocketChannel<SocketChannelName.CHAT> {
+export class ChatChannel extends SocketChannel<SocketChannelName.CHAT> {
   constructor() {
     super(SocketChannelName.CHAT);
   }
@@ -20,7 +19,7 @@ export class ChatService extends SocketChannel<SocketChannelName.CHAT> {
   protected messageValidator: {
     [A in keyof IChatActionMap]: (data: any) => data is IChatActionMap[A];
   } = {
-    send: ChatService.validateIncomingChatMessage,
+    send: ChatChannel.validateIncomingChatMessage,
   };
 
   private static validateIncomingChatMessage(

@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "06/01/2021 7:40:26 PM"
+    "x-generation-date": "06/03/2021 3:46:25 PM"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -1221,7 +1221,7 @@
         "parameters": []
       }
     },
-    "/users/wallet": {
+    "/users/btc-wallet": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -3615,11 +3615,11 @@
               "role": {
                 "type": "string"
               },
-              "wallets": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
+              "wallet": {
+                "type": "string"
+              },
+              "image_url": {
+                "type": "string"
               },
               "created_by": {
                 "type": "string"
@@ -3901,11 +3901,11 @@
                 "role": {
                   "type": "string"
                 },
-                "wallets": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
+                "wallet": {
+                  "type": "string"
+                },
+                "image_url": {
+                  "type": "string"
                 },
                 "created_by": {
                   "type": "string"

@@ -1,4 +1,4 @@
-import { SocketClient } from "../socket-client";
+import { SocketClient } from "../client/socket-client";
 import WebSocket from "ws";
 import { WebsocketError } from "../../../helper/error/websocket-error";
 import { WebsocketErrorMessage } from "../../../helper/error/types";

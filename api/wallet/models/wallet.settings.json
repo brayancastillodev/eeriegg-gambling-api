@@ -24,12 +24,6 @@
       "required": true,
       "unique": false
     },
-    "user": {
-      "plugin": "users-permissions",
-      "model": "user",
-      "required": true,
-      "via": "wallets"
-    },
     "address": {
       "type": "string",
       "required": true,
@@ -40,6 +34,11 @@
       "required": true,
       "private": true,
       "unique": true
+    },
+    "user": {
+      "via": "wallet",
+      "plugin": "users-permissions",
+      "model": "user"
     }
   }
 }

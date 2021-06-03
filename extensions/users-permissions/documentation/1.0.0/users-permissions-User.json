@@ -1251,44 +1251,43 @@
               }
             }
           },
-          "wallets": {
-            "type": "array",
-            "items": {
-              "required": [
-                "id",
-                "public_key",
-                "private_key",
-                "user",
-                "address",
-                "bc_hook_id"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "public_key": {
-                  "type": "string"
-                },
-                "private_key": {
-                  "type": "string"
-                },
-                "user": {
-                  "type": "string"
-                },
-                "address": {
-                  "type": "string"
-                },
-                "bc_hook_id": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "string"
-                }
+          "wallet": {
+            "required": [
+              "id",
+              "public_key",
+              "private_key",
+              "address",
+              "bc_hook_id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "public_key": {
+                "type": "string"
+              },
+              "private_key": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "bc_hook_id": {
+                "type": "string"
+              },
+              "user": {
+                "type": "string"
+              },
+              "created_by": {
+                "type": "string"
+              },
+              "updated_by": {
+                "type": "string"
               }
             }
+          },
+          "image_url": {
+            "type": "string"
           }
         }
       },
@@ -1331,11 +1330,11 @@
           "role": {
             "type": "string"
           },
-          "wallets": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+          "wallet": {
+            "type": "string"
+          },
+          "image_url": {
+            "type": "string"
           },
           "created_by": {
             "type": "string"

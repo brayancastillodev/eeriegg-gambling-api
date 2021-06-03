@@ -1,18 +1,18 @@
-import { SocketClient } from "../socket-client";
+import { SocketClient } from "../client/socket-client";
 import { SocketChannelName } from "../types";
 import { messageParser } from "../../../helper/parser/socket-message-parser";
 import { WebsocketError } from "../../../helper/error/websocket-error";
 import { WebsocketErrorMessage } from "../../../helper/error/types";
 import { SocketPoolInstance } from "../pool";
-import { ChatServiceInstance } from "../../../channels/chat";
-import { GeneralServiceInstance } from "../../../channels/general";
-import { CoinFlipServiceInstance } from "../../../channels/coin-flip";
+import { ChatChannelInstance } from "../../../channels/chat";
+import { GeneralChannelInstance } from "../../../channels/general";
+import { CoinFlipChannelInstance } from "../../../channels/coin-flip";
 
 export class SocketHandler {
   private channels = {
-    [SocketChannelName.CHAT]: ChatServiceInstance,
-    [SocketChannelName.GENERAL]: GeneralServiceInstance,
-    [SocketChannelName.COIN_FLIP]: CoinFlipServiceInstance,
+    [SocketChannelName.CHAT]: ChatChannelInstance,
+    [SocketChannelName.GENERAL]: GeneralChannelInstance,
+    [SocketChannelName.COIN_FLIP]: CoinFlipChannelInstance,
   };
 
   public async handleIncomingMessage(message: string, clientId: string) {
@@ -20,6 +20,10 @@ export class SocketHandler {
     try {
       const parsedMessage = messageParser(message);
       const channel = this.channels[parsedMessage.channel];
+      if (channel.auth) {
+        client = SocketPoolInstance.getClient(clientId);
+        client.user; // check if client authenticated
+      }
       await channel.handleAction(parsedMessage, clientId);
     } catch (error) {
       console.warn("SocketService", "handleIncomingMessage", "error", error);

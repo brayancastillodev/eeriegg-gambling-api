@@ -1,7 +1,7 @@
 import WebSocket from "ws";
-import { SocketHandlerInstance } from "./handler";
-import { SocketPoolInstance } from "./pool";
-import { SocketClient } from "./socket-client";
+import { SocketClient } from "../../tools/socket";
+import { SocketHandlerInstance } from "../../tools/socket/handler";
+import { SocketPoolInstance } from "../../tools/socket/pool";
 
 /**
  * The `SocketHandler` is responsible to handle all the incoming socket connections.
@@ -10,7 +10,8 @@ import { SocketClient } from "./socket-client";
 export class SocketService {
   private clientGuard: NodeJS.Timeout | undefined;
   private wss: WebSocket.Server | undefined;
-  constructor(strapi: any) {
+
+  constructor() {
     this.manageClientConnections();
     this.wss = new WebSocket.Server({ server: strapi.server });
     this.init();
@@ -66,7 +67,12 @@ export class SocketService {
       SocketPoolInstance.removeClient(client.id);
       SocketHandlerInstance.unsubscribeClientFromAllChannels(client.id);
     } catch (err) {
-      console.info("SocketHandler", "unregisterClient", "client not found", clientId);
+      console.info(
+        "SocketHandler",
+        "unregisterClient",
+        "client not found",
+        clientId
+      );
     }
   };
 

@@ -1,3 +1,3 @@
-import { GeneralService } from "./general";
+import { GeneralChannel } from "./general";
 
-export const GeneralServiceInstance = new GeneralService();
+export const GeneralChannelInstance = new GeneralChannel();

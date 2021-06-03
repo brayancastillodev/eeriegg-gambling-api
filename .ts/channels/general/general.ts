@@ -1,15 +1,13 @@
 import { getUser } from "../../db-controllers/user";
 import { WebsocketErrorMessage } from "../../helper/error/types";
 import { WebsocketError } from "../../helper/error/websocket-error";
-import {
-  SocketPoolInstance,
-  SocketChannelName,
-} from "../../tools/socket";
+import { SocketChannelName, SocketChannel } from "../../tools/socket";
 import { verifyToken } from "../../helper/utils/auth";
 import { IGeneralActionMap } from "./types";
-import { SocketChannel } from "../../tools/socket/channel/socket-channel";
+import { SocketPoolInstance } from "../../tools/socket/pool";
+export class GeneralChannel extends SocketChannel<SocketChannelName.GENERAL> {
+  public readonly auth = false;
 
-export class GeneralService extends SocketChannel<SocketChannelName.GENERAL> {
   constructor() {
     super(SocketChannelName.GENERAL);
   }

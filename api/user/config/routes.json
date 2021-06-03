@@ -10,7 +10,7 @@
     },
     {
       "method": "GET",
-      "path": "/users/wallet",
+      "path": "/users/btc-wallet",
       "handler": "user.getBtcWallet",
       "config": {
         "policies": []

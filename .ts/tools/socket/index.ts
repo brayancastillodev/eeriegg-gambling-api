@@ -1,5 +1,3 @@
-export * from "./handler";
-export * from "./pool";
 export * from "./types";
-export * from "./socket-service";
-export * from "./socket-client";
+export * from "./client/socket-client";
+export * from "./channel/socket-channel";

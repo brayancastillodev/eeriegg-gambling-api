@@ -1,12 +1,12 @@
 import WebSocket from "ws";
-import { WebsocketErrorMessage } from "../../helper/error/types";
-import { WebsocketError } from "../../helper/error/websocket-error";
-import { IUserModel } from "../../models";
+import { WebsocketErrorMessage } from "../../../helper/error/types";
+import { WebsocketError } from "../../../helper/error/websocket-error";
+import { IUserModel } from "../../../models";
 import {
   ISocketChannelEventMap,
   IWebsocketErrorMessage,
   OutgoingSocketMessage,
-} from "./types";
+} from "../types";
 
 /**
  * The `SocketClient` holds the clients socket connection. It is responsible to just communicate with the client.
