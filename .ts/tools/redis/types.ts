@@ -9,5 +9,6 @@ export interface IPubSubEvent<
 
 export enum RedisStoreName {
   JOBS = "jobs",
+  QUEUES = "QUEUES",
   STATE_GAME = "state:game",
 }

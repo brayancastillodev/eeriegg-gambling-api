@@ -1,5 +1,5 @@
 import { RedisStore, IPubSubEvent } from "../redis";
-import { getRedisClient } from "../redis/redis";
+import { getRedisClient } from "../redis/client/redis";
 import { ISocketChannelEventMap } from "../socket";
 
 export class GameManager<

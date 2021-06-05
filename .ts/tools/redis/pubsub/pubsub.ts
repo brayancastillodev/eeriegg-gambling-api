@@ -1,7 +1,7 @@
-import { SocketPoolInstance } from "../socket/pool";
-import { ISocketChannelEventMap, OutgoingSocketMessage } from "../socket/types";
-import { getRedisClient, subscriber } from "./redis";
-import { IPubSubEvent } from "./types";
+import { SocketPoolInstance } from "../../socket/pool";
+import { ISocketChannelEventMap, OutgoingSocketMessage } from "../../socket/types";
+import { getRedisClient, subscriber } from "../client/redis";
+import { IPubSubEvent } from "../types";
 
 export class PubSub<
   Channel extends keyof ISocketChannelEventMap = keyof ISocketChannelEventMap

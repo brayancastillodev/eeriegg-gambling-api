@@ -4,7 +4,7 @@ import {
   REDIS_HOST,
   REDIS_PASSWORD,
   IS_DEVELOPMENT,
-} from "../../global/env";
+} from "../../../global/env";
 
 const connections: Map<string, Redis.Redis> = new Map();
 

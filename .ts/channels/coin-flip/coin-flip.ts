@@ -10,14 +10,23 @@ import { DateTools } from "../../tools/date/date";
 import { GamblingTools } from "../../tools/gambling/gambling";
 import { SocketPoolInstance } from "../../tools/socket/pool";
 import { CronJobServiceInstance } from "../../services/cron";
+import { RedisQueue } from "../../tools/redis/queue/redis-queue";
 
+export interface ICoinFlipQueueParams {
+  clientId: string;
+  gameId: string;
+}
 export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> {
   private gameManager = new GameManager<
     SocketChannelName.COIN_FLIP,
     ICoinFlipGameState,
     ICoinFlipGameStateUpdate
   >(SocketChannelName.COIN_FLIP);
-
+  private queue = new RedisQueue<ICoinFlipQueueParams>(
+    this.name,
+    "ready",
+    (params: ICoinFlipQueueParams) => this.ready_queue_task(params)
+  );
   constructor() {
     super(SocketChannelName.COIN_FLIP);
   }
@@ -29,10 +38,9 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
     ) => Promise<void>;
   } = {
     create: async (clientId) => this.create(clientId),
-    confirm: async (clientId) => {},
     join: async (clientId, message) => this.join(clientId, message.gameId),
     leave: async (clientId, message) => this.leave(clientId, message.gameId),
-    start: async (clientId, message) => this.start(message.gameId, clientId),
+    ready: async (clientId, message) => this.ready(message.gameId, clientId),
   };
 
   protected onSubscribe: (clientId: string) => void = (clientId: string) => {};
@@ -45,6 +53,7 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
     const gameId = uuid.v4();
     await this.gameManager.create(gameId, clientId, {
       id: gameId,
+      initiator: clientId,
     });
     this.publish("created", {
       gameId,
@@ -59,10 +68,25 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
       userId: clientId,
       time: new Date(),
     });
+    await this.gameManager.update(gameId, { opponent: clientId });
   }
 
   private async leave(gameId: string, clientId: string) {
     await this.gameManager.leave(gameId, clientId);
+    const game = await this.gameManager.get(gameId);
+    if (game?.initiator === clientId && !game?.opponent) {
+      return this.gameManager.remove(gameId);
+    }
+    if (game?.initiator === clientId) {
+      await this.gameManager.update(gameId, {
+        opponent: undefined,
+        initiator_ready: undefined,
+        opponent_ready: undefined,
+        initiator: game.opponent,
+      });
+    } else {
+      await this.gameManager.update(gameId, { opponent: undefined });
+    }
     this.gameManager.publish(gameId, "left", {
       gameId,
       userId: clientId,
@@ -70,15 +94,30 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
     });
   }
 
-  private async start(gameId: string, clientId: string): Promise<void> {
+  private async ready(gameId: string, clientId: string): Promise<void> {
+    const joinedGame = await this.gameManager.hasJoined(gameId, clientId);
+    const game = await this.gameManager.get(gameId);
+    const client = SocketPoolInstance.getClient(clientId);
+    if (!joinedGame || !game) {
+      throw new Error("unauthorized");
+    }
+    await this.queue.add({ clientId, gameId }, client.user.id);
+  }
+
+  private async ready_queue_task(params: ICoinFlipQueueParams): Promise<void> {
+    const { clientId, gameId } = params;
     const game = await this.gameManager.get(gameId);
     if (!game) {
-      throw new Error(`game not found ${gameId}`);
+      console.error(
+        "CoinFlipChannel",
+        "ready_queue_task",
+        "fatal game not found",
+        gameId
+      );
+      return;
     }
-    const client = SocketPoolInstance.getClient(clientId);
-    await this.gameManager.update(gameId, { player1: client.user.id });
-    const jobStart = DateTools.in(7);
-    await CronJobServiceInstance.createJob(jobStart, gameId, this.task);
+    const player = game.initiator === clientId ? "initiator" : "opponent";
+    await this.gameManager.update(gameId, { [player]: clientId });
   }
 
   private task = async (gameId: string): Promise<void> => {
@@ -100,7 +139,7 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
     this.gameManager.publish(gameId, "result", {
       gameId,
       time: new Date(),
-      winner: { userId: winner },
+      winner: { userId: winner, value },
     });
   };
 

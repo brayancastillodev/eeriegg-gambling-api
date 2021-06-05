@@ -1,6 +1,6 @@
-import { SocketChannelName } from "../socket";
-import { getRedisClient } from "./redis";
-import { RedisStoreName } from "./types";
+import { SocketChannelName } from "../../socket";
+import { getRedisClient } from "../client/redis";
+import { RedisStoreName } from "../types";
 
 export class RedisStore<T extends { id: string; lastUpdate: Date }, U = any> {
   public readonly client!: ReturnType<typeof getRedisClient>;

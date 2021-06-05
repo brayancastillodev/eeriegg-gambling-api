@@ -3,25 +3,25 @@ export interface ICoinFlipEventMap {
   joined: { gameId: string; userId: string; time: Date };
   created: { gameId: string; time: Date };
   left: { gameId: string; userId: string; time: Date };
-  result: { gameId: string; winner: { userId: string }; time: Date };
+  result: {
+    gameId: string;
+    winner: { userId: string; value: number };
+    time: Date;
+  };
 }
 
 export interface ICoinFlipActionMap {
   join: { gameId: string };
   create: undefined;
   leave: { gameId: string };
-  start: { gameId: string };
-  confirm: undefined;
+  ready: { gameId: string };
 }
 
-export interface ICoinFlipJobParams {
-  gameId: string;
-  player1: string;
-  player2: string;
-}
 export interface ICoinFlipGameStateUpdate {
-  player1?: string;
-  player2?: string;
+  initiator?: string;
+  opponent?: string;
+  initiator_ready?: Date;
+  opponent_ready?: Date;
   result?: {
     winner: string;
     value: number;
@@ -30,4 +30,5 @@ export interface ICoinFlipGameStateUpdate {
 export interface ICoinFlipGameState extends ICoinFlipGameStateUpdate {
   id: string;
   lastUpdate: Date;
+  initiator: string;
 }
