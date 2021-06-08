@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  mongo:
+    image: mongo
+    env_file:
+      - .env.mongo
+    ports:
+      - 27217:27017
+    restart: always
+  redis:
+    image: redis
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6337:6379"
+    restart: always

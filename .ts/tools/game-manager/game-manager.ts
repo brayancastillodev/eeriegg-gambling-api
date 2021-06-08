@@ -1,5 +1,5 @@
 import { RedisStore, IPubSubEvent } from "../redis";
-import { getRedisClient } from "../redis/client/redis";
+import { connectRedisClient } from "../redis/client/redis";
 import { ISocketChannelEventMap } from "../socket";
 
 export class GameManager<
@@ -7,7 +7,7 @@ export class GameManager<
   GameState extends { lastUpdate: Date; id: string } = any,
   GameProps = any
 > extends RedisStore<GameState, GameProps> {
-  private publisher = getRedisClient(`pub:game:${this.id}`);
+  private publisher = connectRedisClient(`pub:game:${this.id}`);
   constructor(public readonly id: Channel) {
     super(id);
     console.log("GameManager", id, "init");

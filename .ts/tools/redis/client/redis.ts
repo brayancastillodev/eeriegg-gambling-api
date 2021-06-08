@@ -33,4 +33,14 @@ export const getRedisClient = (name: string) => {
   return _client;
 };
 
+export const connectRedisClient = (name: string) => {
+  let client = connections.get(name);
+  if (client) {
+    return client;
+  }
+  client = new Redis(IS_DEVELOPMENT ? options_dev : options);
+  connections.set(name, client);
+  return client;
+};
+
 export const subscriber = getRedisClient(`main:sub`);

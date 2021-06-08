@@ -1,0 +1,12 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/coinflip/rooms",
+      "handler": "coin-flip.getRooms",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}
