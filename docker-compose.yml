@@ -2,8 +2,11 @@ version: "3.3"
 services:
   mongo:
     image: mongo
-    env_file:
-      - .env.mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - MONGO_INITDB_ROOT_USERNAME=eeriegg
+      - MONGO_INITDB_ROOT_PASSWORD=eerieggpassword
     ports:
       - 27217:27017
     restart: always

@@ -1,6 +1,7 @@
 import { RedisStore, IPubSubEvent } from "../redis";
 import { connectRedisClient } from "../redis/client/redis";
 import { ISocketChannelEventMap } from "../socket";
+import {ICoinFlipGameState} from "../../channels/coin-flip/types";
 
 export class GameManager<
   Channel extends keyof ISocketChannelEventMap = keyof ISocketChannelEventMap,
@@ -47,6 +48,14 @@ export class GameManager<
   }
   async list(): Promise<string[]> {
     return this.publisher.keys("*");
+  }
+  async all(): Promise<ICoinFlipGameState[]> {
+    const keys = await this.list();
+    if (keys.length === 0) {
+      return [];
+    }
+    const data = await this.publisher.mget(keys);
+    return data.map(e => (e  && JSON.parse(e)));
   }
   async hasJoined(gameId: string, clientId: string): Promise<boolean> {
     const client = await this.publisher.scan(gameId, "MATCH", clientId);
