@@ -11,6 +11,7 @@ import { GamblingTools } from "../../tools/gambling/gambling";
 import { SocketPoolInstance } from "../../tools/socket/pool";
 import { CronJobServiceInstance } from "../../services/cron";
 import { RedisQueue } from "../../tools/redis/queue/redis-queue";
+import { COIN_FLIP_EXPIRE_TIME } from "./settings";
 
 export interface ICoinFlipQueueParams {
   clientId: string;
@@ -54,7 +55,8 @@ export class CoinFlipChannel extends SocketChannel<SocketChannelName.COIN_FLIP> 
     await this.gameManager.create(gameId, clientId, {
       id: gameId,
       initiator: clientId,
-    });
+    }, COIN_FLIP_EXPIRE_TIME);
+    await this.subscribe(clientId);
     this.publish("created", {
       gameId,
       time: new Date(),

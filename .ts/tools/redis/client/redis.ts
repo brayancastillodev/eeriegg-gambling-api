@@ -9,17 +9,19 @@ import {
 const connections: Map<string, Redis.Redis> = new Map();
 
 const options: Redis.RedisOptions = {
-  port: REDIS_PORT, // Redis port
-  host: REDIS_HOST, // Redis host
-  db: 0,
-  password: REDIS_PASSWORD,
-  tls: { rejectUnauthorized: false },
-};
-const options_dev: Redis.RedisOptions = {
-  port: REDIS_PORT, // Redis port
-  host: REDIS_HOST, // Redis host
+  port: REDIS_PORT,
+  host: REDIS_HOST,
   db: 0,
 };
+if (!IS_DEVELOPMENT) {
+  options.password = REDIS_PASSWORD;
+  options.tls = { rejectUnauthorized: false };
+}
+
+
+const dbPools: Map<string, number> = new Map([
+  ['main:pub:coin_flip', 2],
+]);
 
 export const getRedisClient = (name: string) => {
   const client = connections.get(name);
@@ -31,7 +33,8 @@ export const getRedisClient = (name: string) => {
     // client.flushdb();
     return client;
   }
-  const _client = new Redis(IS_DEVELOPMENT ? options_dev : options);
+  const db = dbPools.get(name);
+  const _client = new Redis(db ? { ...options, db } : options);
   connections.set(name, _client);
   _client.del(name)
   // _client.flushdb();
@@ -43,7 +46,8 @@ export const connectRedisClient = (name: string) => {
   if (client) {
     return client;
   }
-  client = new Redis(IS_DEVELOPMENT ? options_dev : options);
+  const db = dbPools.get(name);
+  client = new Redis(db ? { ...options, db } : options);
   connections.set(name, client);
   return client;
 };

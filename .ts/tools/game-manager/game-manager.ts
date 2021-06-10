@@ -41,10 +41,12 @@ export class GameManager<
   async create(
     gameId: string,
     clientId: string,
-    state: Omit<GameState, "lastUpdate">
+    state: Omit<GameState, "lastUpdate">,
+    expireTime?: number
   ): Promise<void> {
+    const expire = expireTime ? ['ex', expireTime] : []
     await this.join(gameId, clientId);
-    await this.save(gameId, state);
+    await this.save(gameId, state, expire);
   }
   async list(): Promise<string[]> {
     return this.publisher.keys("*");

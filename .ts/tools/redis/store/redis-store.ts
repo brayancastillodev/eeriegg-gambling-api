@@ -12,7 +12,8 @@ export class RedisStore<T extends { id: string; lastUpdate: Date }, U = any> {
   public async save(id: string, job: Omit<T, "lastUpdate">): Promise<void> {
     await this.client.set(
       id,
-      JSON.stringify({ ...job, lastUpdate: new Date() })
+      JSON.stringify({ ...job, lastUpdate: new Date() }),
+        ...expire
     );
   }
 
